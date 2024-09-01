@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: ChakraBold;
+  src: url("/assets/fonts/ChakraPetch-Bold.ttf");
+}
+
+@font-face {
+  font-family: Chakra;
+  src: url("/assets/fonts/ChakraPetch-Regular.ttf");
+}
