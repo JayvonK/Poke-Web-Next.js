@@ -21,6 +21,15 @@ interface PokeType {
   }
 }
 
+interface PokeStats {
+  base_stat: number;
+  effort: number;
+  stat: {
+    name: string;
+    url: string;
+  }
+}
+
 interface PokeSprites {
   other: {
     ["official-artwork"]: {
@@ -47,6 +56,7 @@ export interface PokeData {
     name: string;
     url: string;
   }
+  stats: PokeStats[];
   types: PokeType[];
   weight: number;
 }
