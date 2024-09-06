@@ -1,33 +1,23 @@
+import { NameUrl } from "./Common";
+
 interface PokeAbilities {
-  ability: {
-    name: string;
-    url: string;
-  },
+  ability: NameUrl;
   is_hidden: boolean;
   slot: number;
 }
 
 interface PokeMoves {
-  move: {
-    name: string;
-    url: string;
-  }
+  move: NameUrl;
 }
 
 interface PokeType {
-  type: {
-    name: string;
-    url: string;
-  }
+  type: NameUrl;
 }
 
 interface PokeStats {
   base_stat: number;
   effort: number;
-  stat: {
-    name: string;
-    url: string;
-  }
+  stat: NameUrl;
 }
 
 interface PokeSprites {
@@ -50,12 +40,11 @@ interface PokeSprites {
 
 export interface PokeData {
   abilities: PokeAbilities[];
+  height: number;
+  id: number;
   moves: PokeMoves[];
   sprites: PokeSprites;
-  species: {
-    name: string;
-    url: string;
-  }
+  species: NameUrl;
   stats: PokeStats[];
   types: PokeType[];
   weight: number;

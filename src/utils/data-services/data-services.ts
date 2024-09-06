@@ -15,3 +15,9 @@ export const grabPokeEveloution = async (pokeId: number) => {
   const data: PokeEvolution = await promise.json();
   return data;
 }
+
+export const grabPokemonSpecies = async (pokemonName: string | number) => {
+  const promise = await fetch(url + 'pokemon-species/' + pokemonName);
+  const data = await promise.json();
+  return data;
+}

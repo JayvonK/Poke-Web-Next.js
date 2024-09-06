@@ -1,7 +1,4 @@
-interface NameUrl {
-  name: string;
-  url: string;
-}
+import { NameUrl } from "./Common";
 
 interface EvolutionDetails {
   gender: number | null;
