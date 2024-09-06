@@ -1,6 +1,7 @@
 'use client'
 import Navbar from "@/components/Navbar/Navbar";
 import { grabPokemonData } from "@/utils/data-services/data-services";
+import { Button } from "@nextui-org/button";
 import { useEffect, useState } from "react";
 
 export default function Home() { 
