@@ -1,4 +1,5 @@
 import { ButtonType } from '@/enums/ButtonEnums'
+import { Button } from '@nextui-org/button'
 import Image from 'next/image'
 import React from 'react'
 
@@ -9,7 +10,7 @@ interface ButtonProps {
 
 const ButtonComponent = ({ type, onClick }: ButtonProps) => {
   return (
-    <button className='bg-black bg-opacity-50 rounded-2xl w-16 h-16 hover:bg-opacity-40 p-1' onClick={onClick}>
+    <Button className='bg-black bg-opacity-50 rounded-2xl w-16 h-16 p-1' onClick={onClick} isIconOnly>
       <div className='w-full h-full relative'>
         <Image
           src={
@@ -21,7 +22,7 @@ const ButtonComponent = ({ type, onClick }: ButtonProps) => {
           fill
         />
       </div>
-    </button>
+    </Button>
   )
 }
 
