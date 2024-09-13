@@ -45,7 +45,7 @@ export default function Home() {
     <main className={`${bgClass} min-h-screen px-24 py-8`}>
       <Navbar searchVal={searchVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleFavorite} onSearchChange={handleOnChange} onClear={handleClear}/>
 
-      {pokemonData && <img src={pokemonData.sprites.other["official-artwork"].front_default} alt={""}/>}
+      {pokemonData && <img src={pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"}/>}
     </main>
   );
 }
