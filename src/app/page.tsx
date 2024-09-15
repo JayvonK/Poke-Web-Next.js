@@ -5,12 +5,14 @@ import { SquirtleData } from "@/seed/Squirtle";
 import { grabPokemonData } from "@/utils/data-services/data-services";
 import { Button } from "@nextui-org/button";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() { 
   const [searchVal, setSearchVal] = useState<string>("");
+  const [inputVal, setInputVal] = useState<string>("");
   const [bgClass, setBgClass] = useState<string>("bg-poke-blue");
   const [pokemonData, setPokemonData] = useState<PokeData>();
+  const initialLoad = useRef<boolean>(true);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -33,12 +35,16 @@ export default function Home() {
     
   }
 
-  const grabPokemon = async () => {
-    setPokemonData(await grabPokemonData('squirtle'));
+  const grabPokemon = async (pokeVal: string) => {
+    setPokemonData(await grabPokemonData(pokeVal));
   }
 
   useEffect(() => {
-    grabPokemon();
+    if (initialLoad.current){
+      grabPokemon('squirtle');
+    } else {
+      grabPokemon(searchVal);
+    }
   }, [])
 
   return (
