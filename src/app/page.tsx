@@ -3,8 +3,6 @@ import Navbar from "@/components/Navbar/Navbar";
 import { PokeData } from "@/interfaces/PokeData";
 import { SquirtleData } from "@/seed/Squirtle";
 import { grabPokemonData } from "@/utils/data-services/data-services";
-import { Button } from "@nextui-org/button";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 export default function Home() { 
@@ -16,11 +14,11 @@ export default function Home() {
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setSearchVal(value);
+    setInputVal(value);
   }
 
   const handleSearch = () => {
-
+    setSearchVal(inputVal);
   }
 
   const handleClear = () => {
@@ -37,6 +35,7 @@ export default function Home() {
 
   const grabPokemon = async (pokeVal: string) => {
     setPokemonData(await grabPokemonData(pokeVal));
+    initialLoad.current = false;
   }
 
   useEffect(() => {
@@ -45,13 +44,13 @@ export default function Home() {
     } else {
       grabPokemon(searchVal);
     }
-  }, [])
+  }, [searchVal])
 
   return (
     <main className={`${bgClass} min-h-screen px-24 py-8`}>
-      <Navbar searchVal={searchVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleFavorite} onSearchChange={handleOnChange} onClear={handleClear}/>
+      <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleFavorite} onInputChange={handleOnChange} onClear={handleClear}/>
 
-      {pokemonData && <img src={pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"}/>}
+      {pokemonData?.sprites && <img src={pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"}/>}
     </main>
   );
 }
