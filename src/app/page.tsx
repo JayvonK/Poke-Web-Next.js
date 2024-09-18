@@ -2,10 +2,13 @@
 import Navbar from "@/components/Navbar/Navbar";
 import { PokeData } from "@/interfaces/PokeData";
 import { SquirtleData } from "@/seed/Squirtle";
-import { grabPokemonData } from "@/utils/data-services/data-services";
+import { grabPokemonData } from "@/utils/services/data-services";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
-export default function Home() { 
+
+export default function Home() {
   const [searchVal, setSearchVal] = useState<string>("");
   const [inputVal, setInputVal] = useState<string>("");
   const [bgClass, setBgClass] = useState<string>("bg-poke-blue");
@@ -22,24 +25,29 @@ export default function Home() {
   }
 
   const handleClear = () => {
-    setSearchVal("");
+    setInputVal("");
   }
 
   const handleShuffle = () => {
-    
+
   }
 
   const handleFavorite = () => {
-    
+
   }
 
   const grabPokemon = async (pokeVal: string) => {
-    setPokemonData(await grabPokemonData(pokeVal));
+    try {
+      setPokemonData(await grabPokemonData(pokeVal));
+    } catch (error) {
+      toast.error("Pokemon doesn't exist")
+    }
+
     initialLoad.current = false;
   }
 
   useEffect(() => {
-    if (initialLoad.current){
+    if (initialLoad.current) {
       grabPokemon('squirtle');
     } else {
       grabPokemon(searchVal);
@@ -48,9 +56,9 @@ export default function Home() {
 
   return (
     <main className={`${bgClass} min-h-screen px-24 py-8`}>
-      <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleFavorite} onInputChange={handleOnChange} onClear={handleClear}/>
+      <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleFavorite} onInputChange={handleOnChange} onClear={handleClear} />
 
-      {pokemonData?.sprites && <img src={pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"}/>}
+      {pokemonData?.sprites && <img src={pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"} />}
     </main>
   );
 }
