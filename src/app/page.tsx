@@ -1,7 +1,9 @@
 'use client'
 import Navbar from "@/components/Navbar/Navbar";
+import PokeType from "@/components/PokeType/PokeType";
 import { PokeData } from "@/interfaces/PokeData";
 import { SquirtleData } from "@/seed/Squirtle";
+import { capatilizeFirstWord } from "@/utils/helpers/HelperFunctions";
 import { grabPokemonData } from "@/utils/services/data-services";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
@@ -21,7 +23,9 @@ export default function Home() {
   }
 
   const handleSearch = () => {
-    setSearchVal(inputVal);
+    if (inputVal.trim() !== "") {
+      setSearchVal(inputVal);
+    }
   }
 
   const handleClear = () => {
@@ -40,7 +44,6 @@ export default function Home() {
     try {
       const data = await grabPokemonData(pokeVal)
       setPokemonData(data);
-      console.log(data);
     } catch (error) {
       toast.error("Pokemon doesn't exist")
     }
@@ -68,16 +71,18 @@ export default function Home() {
 
           <div className="text-white font-chakra drop-shadow-lg">
             <p className="font-chakra-bold">
-              {pokemonData.id}
+              #{pokemonData.id.toString().padStart(3, '0')}
             </p>
 
             <h2 className="font-chakra-bold">
-              {pokemonData.species.name}
+              {capatilizeFirstWord(pokemonData.species.name)}
             </h2>
 
-            <p>
-              {pokemonData.types[0].type.name              }
-            </p>
+            {
+              pokemonData.types.map((type, idx) => {
+                return <PokeType key={idx} type={type.type.name} />
+              })
+            }
           </div>
         </div>
       }
