@@ -38,7 +38,9 @@ export default function Home() {
 
   const grabPokemon = async (pokeVal: string) => {
     try {
-      setPokemonData(await grabPokemonData(pokeVal));
+      const data = await grabPokemonData(pokeVal)
+      setPokemonData(data);
+      console.log(data);
     } catch (error) {
       toast.error("Pokemon doesn't exist")
     }
@@ -58,7 +60,29 @@ export default function Home() {
     <main className={`${bgClass} min-h-screen px-24 py-8`}>
       <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleFavorite} onInputChange={handleOnChange} onClear={handleClear} />
 
-      {pokemonData?.sprites && <img src={pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"} />}
+      {pokemonData &&
+        <div className="grid grid-cols-2">
+          <div>
+            <img src={pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"} />
+          </div>
+
+          <div className="text-white font-chakra drop-shadow-lg">
+            <p className="font-chakra-bold">
+              {pokemonData.id}
+            </p>
+
+            <h2 className="font-chakra-bold">
+              {pokemonData.species.name}
+            </h2>
+
+            <p>
+              {pokemonData.types[0].type.name              }
+            </p>
+          </div>
+        </div>
+      }
+
+
     </main>
   );
 }

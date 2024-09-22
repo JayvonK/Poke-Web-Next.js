@@ -14,11 +14,13 @@ interface NavbarProps {
 
 const Navbar = ({ inputVal, searchFunction, shuffleFunction, favoriteFunction, onInputChange, onClear }: NavbarProps) => {
   return (
-    <div className='flex items-center justify-between font-chakra'>
+    <div className='grid grid-cols-2 font-chakra mb-20'>
       <h1 className='font-chakra-bold text-8xl drop-shadow-lg text-white'>POKEWEB</h1>
 
       <div className='flex items-center gap-6'>
-        <Input isClearable type="text" value={inputVal} className='w-[405px] h-full' label="Search For Pokemon" onChange={onInputChange} onClear={onClear}/>
+        <div>
+          <Input isClearable type="text" value={inputVal} className='w-[405px] h-full' label="Search For Pokemon" onChange={onInputChange} onClear={onClear} />
+        </div>
 
         <ButtonComponent type={ButtonType.Search} onClick={searchFunction} />
         <ButtonComponent type={ButtonType.Shuffle} onClick={() => { }} />
