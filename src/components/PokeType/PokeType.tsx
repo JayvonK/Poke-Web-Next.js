@@ -1,3 +1,4 @@
+import { capatilizeFirstLetter } from '@/utils/helpers/HelperFunctions'
 import React, { useEffect, useState } from 'react'
 
 const PokeType = (props: { type: string }) => {
@@ -36,7 +37,7 @@ const PokeType = (props: { type: string }) => {
 
   return (
     <div className={`px-3 rounded-full ${bg} inline-block`}>
-      {props.type}
+      {capatilizeFirstLetter(props.type)}
     </div>
   )
 }

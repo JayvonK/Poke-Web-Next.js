@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import PokeType from "@/components/PokeType/PokeType";
 import { PokeData } from "@/interfaces/PokeData";
 import { SquirtleData } from "@/seed/Squirtle";
-import { capatilizeFirstWord } from "@/utils/helpers/HelperFunctions";
+import { capatilizeFirstLetter } from "@/utils/helpers/HelperFunctions";
 import { grabPokemonData } from "@/utils/services/data-services";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
@@ -75,7 +75,7 @@ export default function Home() {
             </p>
 
             <h2 className="font-chakra-bold">
-              {capatilizeFirstWord(pokemonData.species.name)}
+              {capatilizeFirstLetter(pokemonData.species.name)}
             </h2>
 
             {
@@ -83,6 +83,10 @@ export default function Home() {
                 return <PokeType key={idx} type={type.type.name} />
               })
             }
+
+            <p>
+              {capatilizeFirstLetter(pokemonData.moves)}
+            </p>
           </div>
         </div>
       }

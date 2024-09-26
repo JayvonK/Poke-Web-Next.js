@@ -6,7 +6,7 @@ interface PokeAbilities {
   slot: number;
 }
 
-interface PokeMoves {
+export interface PokeMoves {
   move: NameUrl;
 }
 
