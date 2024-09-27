@@ -15,8 +15,11 @@ export default function Home() {
   const [inputVal, setInputVal] = useState<string>("");
   const [bgClass, setBgClass] = useState<string>("bg-poke-blue");
   const [pokemonData, setPokemonData] = useState<PokeData>();
+  const [isShiny, setIsShiny] = useState<boolean>(false);
+  // Using useRef in order to check if page is on initial load (useRef, doesn't cause re-renders like useStates)
   const initialLoad = useRef<boolean>(true);
 
+  // Functions for search input
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputVal(value);
@@ -31,6 +34,7 @@ export default function Home() {
   const handleClear = () => {
     setInputVal("");
   }
+  // End
 
   const handleShuffle = () => {
 
@@ -38,6 +42,10 @@ export default function Home() {
 
   const handleFavorite = () => {
 
+  }
+
+  const handleShinySwitch = () => {
+    setIsShiny(!isShiny);
   }
 
   const grabPokemon = async (pokeVal: string) => {
@@ -66,7 +74,9 @@ export default function Home() {
       {pokemonData &&
         <div className="grid grid-cols-2">
           <div>
-            <img src={pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"} />
+            <button onClick={handleShinySwitch}>
+              <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"} />
+            </button>
           </div>
 
           <div className="text-white font-chakra drop-shadow-lg">

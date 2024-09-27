@@ -36,7 +36,7 @@ const PokeType = (props: { type: string }) => {
   }, [props.type])
 
   return (
-    <div className={`px-3 rounded-full ${bg} inline-block text-2xl mb-6`}>
+    <div className={`px-3 py-1 rounded-full ${bg} inline-block text-2xl mb-6`}>
       {capatilizeFirstLetter(props.type)}
     </div>
   )
