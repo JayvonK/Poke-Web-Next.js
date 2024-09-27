@@ -1,6 +1,6 @@
 import { NameUrl } from "./Common";
 
-interface PokeAbilities {
+export interface PokeAbilities {
   ability: NameUrl;
   is_hidden: boolean;
   slot: number;

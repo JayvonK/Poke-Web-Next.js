@@ -70,11 +70,11 @@ export default function Home() {
           </div>
 
           <div className="text-white font-chakra drop-shadow-lg">
-            <p className="font-chakra-bold">
+            <p className="font-chakra-bold text-3xl mb-4">
               #{pokemonData.id.toString().padStart(3, '0')}
             </p>
 
-            <h2 className="font-chakra-bold">
+            <h2 className="font-chakra-bold text-5xl mb-6">
               {capatilizeFirstLetter(pokemonData.species.name)}
             </h2>
 
@@ -84,8 +84,12 @@ export default function Home() {
               })
             }
 
-            <p>
-              {capatilizeFirstLetter(pokemonData.moves)}
+            <p className="text-2xl max-h-72 overflow-auto mb-6">
+              <span className="font-chakra-bold">Abilities:</span> {capatilizeFirstLetter(pokemonData.abilities)}
+            </p>
+
+            <p className="text-2xl max-h-72 overflow-auto">
+              <span className="font-chakra-bold">Moves:</span> {capatilizeFirstLetter(pokemonData.moves)}
             </p>
           </div>
         </div>
