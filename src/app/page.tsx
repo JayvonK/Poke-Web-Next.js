@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import PokeType from "@/components/PokeType/PokeType";
 import { PokeData } from "@/interfaces/PokeData";
 import { SquirtleData } from "@/seed/Squirtle";
-import { capatilizeFirstLetter } from "@/utils/helpers/HelperFunctions";
+import { capatilizeFirstLetter, ConvertPokeHeight, ConvertPokeWeight } from "@/utils/helpers/HelperFunctions";
 import { grabPokemonData } from "@/utils/services/data-services";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
@@ -72,11 +72,19 @@ export default function Home() {
       <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleFavorite} onInputChange={handleOnChange} onClear={handleClear} />
 
       {pokemonData &&
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 font-chakra">
           <div>
-            <button onClick={handleShinySwitch}>
-              <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"} />
+            <button onClick={handleShinySwitch} className="h-[550px] w-[550px]">
+              <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="w-full h-full"/>
             </button>
+
+            <p className="text-white">
+              Height: {ConvertPokeHeight(pokemonData.height)}
+            </p>
+
+            <p className="text-white">
+              Weight: {ConvertPokeWeight(pokemonData.weight)}lbs
+            </p>
           </div>
 
           <div className="text-white font-chakra drop-shadow-lg">

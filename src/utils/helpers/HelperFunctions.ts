@@ -24,3 +24,14 @@ export const capatilizeFirstLetter = (word: string | PokeMoves[] | PokeAbilities
     )
     .join(", ");
 };
+
+export const ConvertPokeHeight = (decimeter: number) => {
+  const totalInches = decimeter * 3.93701;
+  const feet = Math.floor(totalInches / 12);
+  const inches = Math.round(totalInches % 12);
+  return `${feet}ft ${inches}in`;
+}
+
+export const ConvertPokeWeight = (hectograms: number) => {
+  return (hectograms * 0.220462).toFixed(2);
+}
