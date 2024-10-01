@@ -75,24 +75,16 @@ export default function Home() {
         <div className="grid grid-cols-2 font-chakra">
           <div>
             <button onClick={handleShinySwitch} className="h-[550px] w-[550px]">
-              <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="w-full h-full"/>
+              <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="w-full h-full" />
             </button>
-
-            <p className="text-white">
-              Height: {ConvertPokeHeight(pokemonData.height)}
-            </p>
-
-            <p className="text-white">
-              Weight: {ConvertPokeWeight(pokemonData.weight)}lbs
-            </p>
           </div>
 
-          <div className="text-white font-chakra drop-shadow-lg">
+          <div className="text-white font-chakra drop-shadow-lg text-2xl">
             <p className="font-chakra-bold text-3xl mb-4">
               #{pokemonData.id.toString().padStart(3, '0')}
             </p>
 
-            <h2 className="font-chakra-bold text-5xl mb-6">
+            <h2 className="font-chakra-bold text-[42px] mb-6">
               {capatilizeFirstLetter(pokemonData.species.name)}
             </h2>
 
@@ -102,13 +94,25 @@ export default function Home() {
               })
             }
 
-            <p className="text-2xl max-h-72 overflow-auto mb-6">
-              <span className="font-chakra-bold">Abilities:</span> {capatilizeFirstLetter(pokemonData.abilities)}
-            </p>
+            <div className="grid grid-flow-row gap-7">
+              <p>
+                <span className="font-chakra-bold">Height:</span> {ConvertPokeHeight(pokemonData.height)}
+              </p>
 
-            <p className="text-2xl max-h-72 overflow-auto">
-              <span className="font-chakra-bold">Moves:</span> {capatilizeFirstLetter(pokemonData.moves)}
-            </p>
+              <p>
+                <span className="font-chakra-bold">Weight:</span> {ConvertPokeWeight(pokemonData.weight)}lbs
+              </p>
+
+              <p className="max-h-72 overflow-auto">
+                <span className="font-chakra-bold">Abilities:</span> {capatilizeFirstLetter(pokemonData.abilities)}
+              </p>
+
+              <p className="max-h-72 overflow-auto">
+                <span className="font-chakra-bold">Moves:</span> {capatilizeFirstLetter(pokemonData.moves)}
+              </p>
+            </div>
+
+
           </div>
         </div>
       }
