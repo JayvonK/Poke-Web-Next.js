@@ -72,14 +72,25 @@ export default function Home() {
       <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleFavorite} onInputChange={handleOnChange} onClear={handleClear} />
 
       {pokemonData &&
-        <div className="grid grid-cols-2 font-chakra">
+        <div className="grid grid-cols-2 font-chakra text-white text-2xl">
           <div>
-            <button onClick={handleShinySwitch} className="h-[550px] w-[550px]">
-              <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="w-full h-full" />
+            <button onClick={handleShinySwitch} className="h-[500px] w-[500px]">
+              <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="aspect-square w-full h-full" />
             </button>
+
+            <p className=" font-chakra-bold">Stats <span className="font-chakra">(hover for EV)</span>:</p>
+
+            <div className="grid grid-cols-3">
+              {
+              pokemonData.stats.map((stat, idx) =>
+                <p key={idx}>{capatilizeFirstLetter(stat.stat.name)}: {stat.base_stat}</p>
+              )
+            }
+            </div>
+            
           </div>
 
-          <div className="text-white font-chakra drop-shadow-lg text-2xl">
+          <div className="drop-shadow-lg">
             <p className="font-chakra-bold text-3xl mb-4">
               #{pokemonData.id.toString().padStart(3, '0')}
             </p>

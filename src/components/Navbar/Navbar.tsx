@@ -14,7 +14,7 @@ interface NavbarProps {
 
 const Navbar = ({ inputVal, searchFunction, shuffleFunction, favoriteFunction, onInputChange, onClear }: NavbarProps) => {
   return (
-    <div className='grid grid-cols-2 font-chakra mb-20'>
+    <div className='grid grid-cols-2 font-chakra mb-10'>
       <h1 className='font-chakra-bold text-8xl drop-shadow-lg text-white'>POKEWEB</h1>
 
       <div className='flex items-center gap-6'>

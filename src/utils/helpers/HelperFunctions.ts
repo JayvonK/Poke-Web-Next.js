@@ -2,6 +2,12 @@ import { PokeAbilities, PokeMoves } from "@/interfaces/PokeData";
 
 export const capatilizeFirstLetter = (word: string | PokeMoves[] | PokeAbilities[]) => {
   if (typeof word === "string") {
+    if (word.includes("-")) {
+      return word
+        .split('-')
+        .map((p) => p[0].toUpperCase() + p.slice(1))
+        .join(" ")
+    }
     return word[0].toUpperCase() + word.slice(1);
   }
 
