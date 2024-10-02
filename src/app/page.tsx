@@ -82,12 +82,12 @@ export default function Home() {
 
             <div className="grid grid-cols-3">
               {
-              pokemonData.stats.map((stat, idx) =>
-                <p key={idx}>{capatilizeFirstLetter(stat.stat.name)}: {stat.base_stat}</p>
-              )
-            }
+                pokemonData.stats.map((stat, idx) =>
+                  <p key={idx}>{capatilizeFirstLetter(stat.stat.name)}: {stat.base_stat}</p>
+                )
+              }
             </div>
-            
+
           </div>
 
           <div className="drop-shadow-lg">
@@ -122,7 +122,6 @@ export default function Home() {
                 <span className="font-chakra-bold">Moves:</span> {capatilizeFirstLetter(pokemonData.moves)}
               </p>
             </div>
-
 
           </div>
         </div>
