@@ -4,16 +4,28 @@ import PokeType from "@/components/PokeType/PokeType";
 import { PokeData } from "@/interfaces/PokeData";
 import { SquirtleData } from "@/seed/Squirtle";
 import { capatilizeFirstLetter, ConvertPokeHeight, ConvertPokeWeight } from "@/utils/helpers/HelperFunctions";
-import { grabPokemonData } from "@/utils/services/data-services";
+import { grabPokemonData, grabPokemonSpecies } from "@/utils/services/data-services";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function Home() {
+  const bgColors: { [key: string]: string } = {
+    "blue": "bg-poke-blue",
+    "red": "bg-poke-red",
+    "purple": "bg-poke-purple",
+    "black": "bg-poke-black",
+    "brown": "bg-poke-brown",
+    "gray": "bg-poke-gray",
+    "green": "bg-poke-green",
+    "pink": "bg-poke-pink",
+    "white": "bg-poke-white",
+    "yellow": "bg-poke-yellow",
+  }
   const [searchVal, setSearchVal] = useState<string>("");
   const [inputVal, setInputVal] = useState<string>("");
-  const [bgClass, setBgClass] = useState<string>("bg-poke-blue");
+  const [bgClass, setBgClass] = useState<string>("bg-poke-white");
   const [pokemonData, setPokemonData] = useState<PokeData>();
   const [isShiny, setIsShiny] = useState<boolean>(false);
   // Using useRef in order to check if page is on initial load (useRef, doesn't cause re-renders like useStates)
@@ -52,6 +64,9 @@ export default function Home() {
     try {
       const data = await grabPokemonData(pokeVal)
       setPokemonData(data);
+
+      const speciesData = await grabPokemonSpecies(data.id);
+      setBgClass(bgColors[speciesData.color.name])
     } catch (error) {
       toast.error("Pokemon doesn't exist")
     }

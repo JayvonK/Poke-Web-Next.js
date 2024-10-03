@@ -1,5 +1,6 @@
 import { PokeData } from "@/interfaces/PokeData";
 import { PokeEvolution } from "@/interfaces/PokeEvolution";
+import { PokeSpecies } from "@/interfaces/PokeSpecies";
 
 const url = 'https://pokeapi.co/api/v2/';
 
@@ -17,6 +18,6 @@ export const grabPokeEveloution = async (pokeId: number) => {
 
 export const grabPokemonSpecies = async (pokemonName: string | number) => {
   const promise = await fetch(url + 'pokemon-species/' + pokemonName);
-  const data = await promise.json();
+  const data: PokeSpecies = await promise.json();
   return data;
 }
