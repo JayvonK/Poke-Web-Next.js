@@ -6,7 +6,7 @@ import { SquirtleData } from "@/seed/Squirtle";
 import { capatilizeFirstLetter, ConvertPokeHeight, ConvertPokeWeight } from "@/utils/helpers/HelperFunctions";
 import { grabPokemonData, grabPokemonSpecies } from "@/utils/services/data-services";
 import { Tooltip } from "@nextui-org/tooltip";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -24,12 +24,14 @@ export default function Home() {
     "white": "bg-poke-white",
     "yellow": "bg-poke-yellow",
   }
+  let favArray: string[] = JSON.parse(localStorage.getItem("favs") || "[]");
   const [searchVal, setSearchVal] = useState<string>("");
   const [inputVal, setInputVal] = useState<string>("");
   const [bgClass, setBgClass] = useState<string>("bg-poke-white");
   const [pokemonData, setPokemonData] = useState<PokeData>();
   const [isShiny, setIsShiny] = useState<boolean>(false);
   const [isFav, setIsFav] = useState<boolean>(false);
+
   // Using useRef in order to check if page is on initial load (useRef, doesn't cause re-renders like useStates)
   const initialLoad = useRef<boolean>(true);
 
@@ -55,43 +57,53 @@ export default function Home() {
     setSearchVal(randomVal);
   }
 
-  const handleFavorite = () => {
-    setIsFav(!isFav)
+  const handleOpenFavorites = () => {
+
   }
 
   const handleShinySwitch = () => {
     setIsShiny(!isShiny);
   }
 
-  const grabPokemon = async (pokeVal: string) => {
+  const handleToggleFavorite = () => {
+    const id = pokemonData?.id.toString() || '7';
+
+    !isFav ? favArray.push(id) : favArray.splice(favArray.indexOf(id), 1);
+    localStorage.setItem("favs", JSON.stringify(favArray));
+    setIsFav(!isFav);
+  }
+
+  const grabPokemon = useCallback(async (pokeVal: string) => {
     try {
       const data = await grabPokemonData(pokeVal)
       setPokemonData(data);
-      console.log(data);
 
       const speciesData = await grabPokemonSpecies(data.id);
       setBgClass(bgColors[speciesData.color.name])
+
+      setIsFav(favArray.includes(data.id.toString()));
     } catch (error) {
       toast.error("Pokemon doesn't exist")
     }
 
     initialLoad.current = false;
-  }
+  }, [])
 
   useEffect(() => {
+
     if (initialLoad.current) {
       grabPokemon('squirtle');
     } else {
       grabPokemon(searchVal);
     }
-  }, [searchVal])
+  }, [searchVal, grabPokemon])
 
   return (
     <main className={`${bgClass} min-h-screen px-24 py-8 relative`}>
       {/* This is an absolute picture that is centered with the whole screen */}
       <img src="/assets/images/poke ball.png" alt="" className="fixed z-10 left-1/2 top-1/2 transform translate-x-[-50%] translate-y-[-50%] opacity-5" />
 
-      <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleFavorite} onInputChange={handleOnChange} onClear={handleClear} />
+      <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleOpenFavorites} onInputChange={handleOnChange} onClear={handleClear} />
 
       {pokemonData &&
         <div className="grid grid-cols-2 font-chakra text-white text-2xl z-20 relative">
@@ -128,7 +140,7 @@ export default function Home() {
                 {capatilizeFirstLetter(pokemonData.species.name)}
               </h2>
 
-              <button onClick={handleFavorite}>
+              <button onClick={handleToggleFavorite}>
                 <img src={isFav ? "/assets/images/heart fill.png" : "/assets/images/heart outline.png"} alt="" className={`${isFav ? "h-12" : "h-11"} -mt-3`} />
               </button>
             </div>
