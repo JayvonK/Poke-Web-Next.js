@@ -5,6 +5,7 @@ import { PokeData } from "@/interfaces/PokeData";
 import { SquirtleData } from "@/seed/Squirtle";
 import { capatilizeFirstLetter, ConvertPokeHeight, ConvertPokeWeight } from "@/utils/helpers/HelperFunctions";
 import { grabPokemonData, grabPokemonSpecies } from "@/utils/services/data-services";
+import { Tooltip } from "@nextui-org/tooltip";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -49,7 +50,8 @@ export default function Home() {
   // End
 
   const handleShuffle = () => {
-
+    const randomVal = (Math.floor(Math.random() * 500)).toString();
+    setSearchVal(randomVal);
   }
 
   const handleFavorite = () => {
@@ -64,6 +66,7 @@ export default function Home() {
     try {
       const data = await grabPokemonData(pokeVal)
       setPokemonData(data);
+      console.log(data);
 
       const speciesData = await grabPokemonSpecies(data.id);
       setBgClass(bgColors[speciesData.color.name])
@@ -83,29 +86,33 @@ export default function Home() {
   }, [searchVal])
 
   return (
-    <main className={`${bgClass} min-h-screen px-24 py-8`}>
+    <main className={`${bgClass} min-h-screen px-24 py-8 relative`}>
       <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleFavorite} onInputChange={handleOnChange} onClear={handleClear} />
 
       {pokemonData &&
         <div className="grid grid-cols-2 font-chakra text-white text-2xl">
           <div>
             <button onClick={handleShinySwitch} className="h-[500px] w-[500px]">
-              <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="aspect-square w-full h-full" />
+              <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites?.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="aspect-square w-full h-full" />
             </button>
 
-            <p className=" font-chakra-bold">Stats <span className="font-chakra">(hover for EV)</span>:</p>
+            <p className="font-chakra-bold mb-4">Stats <span className="font-chakra">(hover for EV)</span>:</p>
 
-            <div className="grid grid-cols-3">
+            <div className="grid grid-cols-3 gap-y-4">
               {
                 pokemonData.stats.map((stat, idx) =>
-                  <p key={idx}>{capatilizeFirstLetter(stat.stat.name)}: {stat.base_stat}</p>
+                  <Tooltip showArrow={true} content={stat.effort + ' effort points'} placement="top-start" key={idx}>
+                    <p className="hover:cursor-pointer w-fit">
+                      {stat.stat.name === 'hp' ? stat.stat.name.toUpperCase() : capatilizeFirstLetter(stat.stat.name)}: {stat.base_stat}
+                    </p>
+                  </Tooltip>
                 )
               }
             </div>
 
           </div>
 
-          <div className="drop-shadow-lg">
+          <div className="drop-shadow-lg h-full">
             <p className="font-chakra-bold text-3xl mb-4">
               #{pokemonData.id.toString().padStart(3, '0')}
             </p>

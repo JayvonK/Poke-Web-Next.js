@@ -3,7 +3,7 @@ import { PokeData } from "@/interfaces/PokeData";
 export const SquirtleData: PokeData = {
   abilities: [],
   height: 0,
-  id: 0,
+  id: 7,
   moves: [],
   sprites: {
     other: {
@@ -23,7 +23,7 @@ export const SquirtleData: PokeData = {
     }
   },
   species: {
-    name: "",
+    name: "Squirtle",
     url: ""
   },
   stats: [],

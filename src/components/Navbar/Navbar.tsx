@@ -23,8 +23,8 @@ const Navbar = ({ inputVal, searchFunction, shuffleFunction, favoriteFunction, o
         </div>
 
         <ButtonComponent type={ButtonType.Search} onClick={searchFunction} />
-        <ButtonComponent type={ButtonType.Shuffle} onClick={() => { }} />
-        <ButtonComponent type={ButtonType.Favorite} onClick={() => { }} />
+        <ButtonComponent type={ButtonType.Shuffle} onClick={shuffleFunction} />
+        <ButtonComponent type={ButtonType.Favorite} onClick={favoriteFunction} />
       </div>
     </div>
   )
