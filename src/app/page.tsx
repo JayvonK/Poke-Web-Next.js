@@ -24,7 +24,7 @@ export default function Home() {
     "white": "bg-poke-white",
     "yellow": "bg-poke-yellow",
   }
-  let favArray: string[] = JSON.parse(localStorage.getItem("favs") || "[]");
+  let favArray: string[] = typeof window === 'undefined' ? [] : JSON.parse(localStorage.getItem("favs") || "[]");
   const [searchVal, setSearchVal] = useState<string>("");
   const [inputVal, setInputVal] = useState<string>("");
   const [bgClass, setBgClass] = useState<string>("bg-poke-white");
