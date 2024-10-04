@@ -29,6 +29,7 @@ export default function Home() {
   const [bgClass, setBgClass] = useState<string>("bg-poke-white");
   const [pokemonData, setPokemonData] = useState<PokeData>();
   const [isShiny, setIsShiny] = useState<boolean>(false);
+  const [isFav, setIsFav] = useState<boolean>(false);
   // Using useRef in order to check if page is on initial load (useRef, doesn't cause re-renders like useStates)
   const initialLoad = useRef<boolean>(true);
 
@@ -55,7 +56,7 @@ export default function Home() {
   }
 
   const handleFavorite = () => {
-
+    setIsFav(!isFav)
   }
 
   const handleShinySwitch = () => {
@@ -87,22 +88,27 @@ export default function Home() {
 
   return (
     <main className={`${bgClass} min-h-screen px-24 py-8 relative`}>
+      {/* This is an absolute picture that is centered with the whole screen */}
+      <img src="/assets/images/poke ball.png" alt="" className="fixed z-10 left-1/2 top-1/2 transform translate-x-[-50%] translate-y-[-50%] opacity-5" />
+
       <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleFavorite} onInputChange={handleOnChange} onClear={handleClear} />
 
       {pokemonData &&
-        <div className="grid grid-cols-2 font-chakra text-white text-2xl">
+        <div className="grid grid-cols-2 font-chakra text-white text-2xl z-20 relative">
           <div>
-            <button onClick={handleShinySwitch} className="h-[500px] w-[500px]">
-              <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites?.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="aspect-square w-full h-full" />
-            </button>
+            <div className="flex w-full justify-center">
+              <button onClick={handleShinySwitch} className="h-[500px] w-[500px]">
+                <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites?.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="aspect-square w-full h-full" />
+              </button>
+            </div>
 
             <p className="font-chakra-bold mb-4">Stats <span className="font-chakra">(hover for EV)</span>:</p>
 
             <div className="grid grid-cols-3 gap-y-4">
               {
                 pokemonData.stats.map((stat, idx) =>
-                  <Tooltip showArrow={true} content={stat.effort + ' effort points'} placement="top-start" key={idx}>
-                    <p className="hover:cursor-pointer w-fit">
+                  <Tooltip showArrow={true} content={stat.effort + ' Effort Points'} placement="top-start" key={idx}>
+                    <p className="hover:cursor-default w-fit">
                       {stat.stat.name === 'hp' ? stat.stat.name.toUpperCase() : capatilizeFirstLetter(stat.stat.name)}: {stat.base_stat}
                     </p>
                   </Tooltip>
@@ -117,9 +123,15 @@ export default function Home() {
               #{pokemonData.id.toString().padStart(3, '0')}
             </p>
 
-            <h2 className="font-chakra-bold text-[42px] mb-6">
-              {capatilizeFirstLetter(pokemonData.species.name)}
-            </h2>
+            <div className="flex gap-4 mb-6 min-h-12">
+              <h2 className="font-chakra-bold text-[42px]">
+                {capatilizeFirstLetter(pokemonData.species.name)}
+              </h2>
+
+              <button onClick={handleFavorite}>
+                <img src={isFav ? "/assets/images/heart fill.png" : "/assets/images/heart outline.png"} alt="" className={`${isFav ? "h-12" : "h-11"} -mt-3`} />
+              </button>
+            </div>
 
             {
               pokemonData.types.map((type, idx) => {
