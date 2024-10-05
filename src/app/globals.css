@@ -14,5 +14,5 @@
 
 .sideways {
   writing-mode: vertical-rl;
-  transform: rotate(180deg);
+  transform: rotate(180deg) !important;
 }

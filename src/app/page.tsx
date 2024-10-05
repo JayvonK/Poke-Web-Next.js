@@ -115,7 +115,8 @@ export default function Home() {
               <button onClick={handleShinySwitch} className="h-[500px] w-[500px]">
                 <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites?.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="aspect-square w-full h-full" />
               </button>
-              <p className="sideways absolute -left-10 top-[20%]">Click the pokemon!</p>
+
+              <p className="sideways absolute -left-10 top-[20%] animate-pulse">Click the pokemon!</p>
             </div>
 
             <p className="font-chakra-bold mb-4">Stats <span className="font-chakra">(hover for EV)</span>:</p>
