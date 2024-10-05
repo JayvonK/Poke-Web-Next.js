@@ -25,6 +25,7 @@ export default function Home() {
     "yellow": "bg-poke-yellow",
   }
   let favArray: string[] = typeof window === 'undefined' ? [] : JSON.parse(localStorage.getItem("favs") || "[]");
+  let pastSearch = typeof window === 'undefined' ? "7" : JSON.parse(localStorage.getItem("pastPokeSearch") || "7")
   const [searchVal, setSearchVal] = useState<string>("");
   const [inputVal, setInputVal] = useState<string>("");
   const [bgClass, setBgClass] = useState<string>("bg-poke-white");
@@ -75,13 +76,15 @@ export default function Home() {
 
   const grabPokemon = useCallback(async (pokeVal: string) => {
     try {
-      const data = await grabPokemonData(pokeVal)
+      const data = await grabPokemonData(pokeVal);
+      const id = data.id.toString();
       setPokemonData(data);
 
       const speciesData = await grabPokemonSpecies(data.id);
       setBgClass(bgColors[speciesData.color.name])
 
-      setIsFav(favArray.includes(data.id.toString()));
+      setIsFav(favArray.includes(id));
+      localStorage.setItem("pastPokeSearch", id)
     } catch (error) {
       toast.error("Pokemon doesn't exist")
     }
@@ -92,11 +95,11 @@ export default function Home() {
   useEffect(() => {
 
     if (initialLoad.current) {
-      grabPokemon('squirtle');
+      grabPokemon(pastSearch);
     } else {
       grabPokemon(searchVal);
     }
-  }, [searchVal, grabPokemon])
+  }, [searchVal])
 
   return (
     <main className={`${bgClass} min-h-screen px-24 py-8 relative`}>
@@ -112,6 +115,7 @@ export default function Home() {
               <button onClick={handleShinySwitch} className="h-[500px] w-[500px]">
                 <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites?.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="aspect-square w-full h-full" />
               </button>
+              <p className="sideways absolute -left-10 top-[20%]">Click the pokemon!</p>
             </div>
 
             <p className="font-chakra-bold mb-4">Stats <span className="font-chakra">(hover for EV)</span>:</p>

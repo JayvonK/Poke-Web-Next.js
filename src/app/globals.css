@@ -11,3 +11,8 @@
   font-family: Chakra;
   src: url("/assets/fonts/ChakraPetch-Regular.ttf");
 }
+
+.sideways {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
