@@ -51,6 +51,9 @@ const config: Config = {
         "fairy": "#ffaec9",
         "unknown": "#9e004a",
         "shadow": "#000000",
+      },
+      screens: {
+        '3xl': '1920px'
       }
     },
   },

@@ -9,17 +9,18 @@ interface NavbarProps {
   onClear: () => void,
   searchFunction: () => void,
   shuffleFunction: () => void,
-  favoriteFunction: () => void
+  favoriteFunction: () => void,
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void
 }
 
-const Navbar = ({ inputVal, searchFunction, shuffleFunction, favoriteFunction, onInputChange, onClear }: NavbarProps) => {
+const Navbar = ({ inputVal, searchFunction, shuffleFunction, favoriteFunction, onInputChange, onClear, onKeyDown }: NavbarProps) => {
   return (
     <div className='grid grid-cols-2 font-chakra mb-10'>
       <h1 className='font-chakra-bold text-8xl drop-shadow-lg text-white'>POKEWEB</h1>
 
       <div className='flex items-center gap-6'>
         <div>
-          <Input isClearable type="text" value={inputVal} className='w-[405px] h-full' label="Search For Pokemon" onChange={onInputChange} onClear={onClear} />
+          <Input isClearable type="text" value={inputVal} className='w-[405px] h-full' label="Search For Pokemon" onChange={onInputChange} onClear={onClear} onKeyDown={onKeyDown}/>
         </div>
 
         <ButtonComponent type={ButtonType.Search} onClick={searchFunction} />
