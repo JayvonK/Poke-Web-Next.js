@@ -5,9 +5,8 @@ import { PokeData } from "@/interfaces/PokeData";
 import { capatilizeFirstLetter, ConvertPokeHeight, ConvertPokeWeight } from "@/utils/helpers/HelperFunctions";
 import { grabPokemonData, grabPokemonSpecies } from "@/utils/services/data-services";
 import { Button } from "@nextui-org/button";
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal";
+import { Modal, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal";
 import { Tooltip } from "@nextui-org/tooltip";
-import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -159,7 +158,7 @@ export default function Home() {
                 </button>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {
                   pokemonData.types.map((type, idx) => {
                     return <PokeType key={idx} type={type.type.name} />
@@ -194,7 +193,7 @@ export default function Home() {
           {(onClose) => (
             <div>
               <ModalHeader className="flex flex-col gap-1">Favorites</ModalHeader>
-              <div className="grid grid-cols-7 px-6 gap-4">
+              <div className="flex flex-wrap px-6 gap-4">
                 {
                   favArray.map((fav, idx) =>
                     <button key={idx} onClick={() => { setSearchVal(fav); onClose() }} className="hover:scale-110">

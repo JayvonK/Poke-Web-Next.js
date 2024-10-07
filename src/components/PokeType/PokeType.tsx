@@ -4,26 +4,26 @@ import React, { useEffect, useState } from 'react'
 const PokeType = (props: { type: string }) => {
   // Example of using typescript's index signature
   const colorClasses: { [key: string]: string } = {
-    water: "bg-water",
-    normal: "bg-normal",
-    fighting: "bg-fighting",
-    flying: "bg-flying",
-    poison: "bg-poison",
-    ground: "bg-ground",
-    rock: "bg-rock",
-    bug: "bg-bug",
-    ghost: "bg-ghost",
-    steel: "bg-steel",
-    fire: "bg-fire",
-    grass: "bg-grass",
-    electric: "bg-electric",
-    psychic: "bg-psychic",
-    ice: "bg-ice",
-    dragon: "bg-dragon",
-    dark: "bg-dark",
-    fairy: "bg-fairy",
-    unknown: "bg-unknown",
-    shadow: "bg-shadow",
+    water: "bg-poke-water",
+    normal: "bg-poke-normal",
+    fighting: "bg-poke-fighting",
+    flying: "bg-poke-flying",
+    poison: "bg-poke-poison",
+    ground: "bg-poke-ground",
+    rock: "bg-poke-rock",
+    bug: "bg-poke-bug",
+    ghost: "bg-poke-ghost",
+    steel: "bg-poke-steel",
+    fire: "bg-poke-fire",
+    grass: "bg-poke-grass",
+    electric: "bg-poke-electric",
+    psychic: "bg-poke-psychic",
+    ice: "bg-poke-ice",
+    dragon: "bg-poke-dragon",
+    dark: "bg-poke-dark",
+    fairy: "bg-poke-fairy",
+    unknown: "bg-poke-unknown",
+    shadow: "bg-poke-shadow",
   }
 
   const [bg, setBg] = useState<string>("")
@@ -36,8 +36,8 @@ const PokeType = (props: { type: string }) => {
   }, [props.type])
 
   return (
-    <div className={`px-3 py-1 rounded-full ${bg} inline-block text-2xl mb-6`}>
-      {capatilizeFirstLetter(props.type)}
+    <div className={`px-3 py-1 rounded-full ${bg} inline-block text-2xl mb-6 drop-shadow-lg w-fit`}>
+      <p className='drop-shadow-lg'>{capatilizeFirstLetter(props.type)}</p>
     </div>
   )
 }
