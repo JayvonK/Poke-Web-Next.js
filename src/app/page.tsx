@@ -4,7 +4,10 @@ import PokeType from "@/components/PokeType/PokeType";
 import { PokeData } from "@/interfaces/PokeData";
 import { capatilizeFirstLetter, ConvertPokeHeight, ConvertPokeWeight } from "@/utils/helpers/HelperFunctions";
 import { grabPokemonData, grabPokemonSpecies } from "@/utils/services/data-services";
+import { Button } from "@nextui-org/button";
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal";
 import { Tooltip } from "@nextui-org/tooltip";
+import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,13 +27,14 @@ export default function Home() {
     "yellow": "bg-poke-yellow",
   }
   let favArray: string[] = typeof window === 'undefined' ? [] : JSON.parse(localStorage.getItem("favs") || "[]");
-  let pastSearch = typeof window === 'undefined' ? "7" : JSON.parse(localStorage.getItem("pastPokeSearch") || "7")
+  let pastSearch = typeof window === 'undefined' ? "7" : JSON.parse(localStorage.getItem("pastPokeSearch") || "7");
   const [searchVal, setSearchVal] = useState<string>("");
   const [inputVal, setInputVal] = useState<string>("");
   const [bgClass, setBgClass] = useState<string>("bg-poke-white");
   const [pokemonData, setPokemonData] = useState<PokeData>();
   const [isShiny, setIsShiny] = useState<boolean>(false);
   const [isFav, setIsFav] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   // Using useRef in order to check if page is on initial load (useRef, doesn't cause re-renders like useStates)
   const initialLoad = useRef<boolean>(true);
@@ -42,7 +46,7 @@ export default function Home() {
   }
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter"){
+    if (e.key === "Enter") {
       handleSearch();
     }
   }
@@ -64,7 +68,7 @@ export default function Home() {
   }
 
   const handleOpenFavorites = () => {
-
+    setIsModalOpen(!isModalOpen);
   }
 
   const handleShinySwitch = () => {
@@ -110,7 +114,7 @@ export default function Home() {
       {/* This is an absolute picture that is centered with the whole screen */}
       <img src="/assets/images/poke ball.png" alt="" className="fixed z-10 left-1/2 top-1/2 transform translate-x-[-50%] translate-y-[-50%] opacity-5" />
 
-      <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleOpenFavorites} onInputChange={handleOnChange} onClear={handleClear} onKeyDown={onKeyDown}/>
+      <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleOpenFavorites} onInputChange={handleOnChange} onClear={handleClear} onKeyDown={onKeyDown} />
 
       <div className="flex-grow">
         {
@@ -118,7 +122,7 @@ export default function Home() {
           <div className="grid grid-cols-2 font-chakra text-white text-2xl z-20 relative">
             <div>
               <div className="flex w-full justify-center">
-                <button onClick={handleShinySwitch} className="h-[500px] w-[500px]">
+                <button onClick={handleShinySwitch} className="h-[500px] w-[500px] hover:scale-110">
                   <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites?.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="aspect-square w-full h-full" />
                 </button>
 
@@ -138,7 +142,6 @@ export default function Home() {
                   )
                 }
               </div>
-
             </div>
 
             <div className="drop-shadow-lg h-full">
@@ -164,7 +167,6 @@ export default function Home() {
                 }
               </div>
 
-
               <div className="grid grid-flow-row gap-7">
                 <p>
                   <span className="font-chakra-bold">Height:</span> {ConvertPokeHeight(pokemonData.height)}
@@ -182,13 +184,39 @@ export default function Home() {
                   <span className="font-chakra-bold">Moves:</span> {capatilizeFirstLetter(pokemonData.moves)}
                 </p>
               </div>
-
             </div>
           </div>
         }
       </div>
 
-
+      <Modal backdrop="blur" isOpen={isModalOpen} onOpenChange={handleOpenFavorites} size="2xl" classNames={{ body: "bg-black" }}>
+        <ModalContent>
+          {(onClose) => (
+            <div>
+              <ModalHeader className="flex flex-col gap-1">Favorites</ModalHeader>
+              <div className="grid grid-cols-7 px-6 gap-4">
+                {
+                  favArray.map((fav, idx) =>
+                    <button key={idx} onClick={() => { setSearchVal(fav); onClose() }} className="hover:scale-110">
+                      <div className='w-full h-full relative'>
+                        <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${fav}.png`}
+                          alt={'Picture of pokemon'}
+                          className="w-16"
+                        />
+                      </div>
+                    </button>
+                  )
+                }
+              </div>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </ div>
+          )}
+        </ModalContent>
+      </Modal>
     </main>
   );
 }
