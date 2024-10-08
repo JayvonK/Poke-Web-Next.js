@@ -139,7 +139,7 @@ export default function Home() {
       {/* This is an absolute picture that is centered with the whole screen */}
       <img src="/assets/images/poke ball.png" alt="" className="fixed z-10 left-1/2 top-1/2 transform translate-x-[-50%] translate-y-[-50%] opacity-10" />
 
-      <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleOpenFavorites} onInputChange={handleOnChange} onClear={handleClear} onKeyDown={onKeyDown} />
+      <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleOpenFavorites} onInputChange={handleOnChange} onClear={handleClear} onKeyDown={onKeyDown} allPokemon={allPokemons || []}/>
 
       <div className="flex-grow">
         {
