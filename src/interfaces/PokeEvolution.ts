@@ -21,7 +21,7 @@ interface EvolutionDetails {
   turn_upside_down: boolean | null;
 }
 
-interface PokeEvolve {
+export interface PokeEvolve {
   evolution_details: EvolutionDetails[];
   evolves_to: PokeEvolve[];
   species: NameUrl;

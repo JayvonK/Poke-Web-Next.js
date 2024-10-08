@@ -5,6 +5,7 @@ import PokeType from "@/components/PokeType/PokeType";
 import { PokeData } from "@/interfaces/PokeData";
 import { PokeEvolution } from "@/interfaces/PokeEvolution";
 import { PokeSpecies } from "@/interfaces/PokeSpecies";
+import { getAllEvolutionIds, GrabEvolutionHelper } from "@/utils/helpers/EvolutionChainFunction";
 import { capatilizeFirstLetter, ConvertPokeHeight, ConvertPokeWeight, GrabIdFromUrl } from "@/utils/helpers/HelperFunctions";
 import { grabPokeEveloution, grabPokemonData, grabPokemonSpecies } from "@/utils/services/data-services";
 import { Button } from "@nextui-org/button";
@@ -66,7 +67,7 @@ export default function Home() {
   // End
 
   const handleShuffle = () => {
-    const randomVal = (Math.floor(Math.random() * 500)).toString();
+    const randomVal = (Math.floor(Math.random() * 1025) + 1).toString();
     setSearchVal(randomVal);
   }
 
@@ -100,7 +101,6 @@ export default function Home() {
 
       const evolutionData = await grabPokeEveloution(speciesData.evolution_chain.url);
       setEvolutionData(evolutionData);
-      console.log(evolutionData);
     } catch (error) {
       toast.error("Pokemon doesn't exist")
     }
@@ -195,14 +195,10 @@ export default function Home() {
 
             <div>
               <p className="font-chakra-bold drop-shadow-lg mb-8">Evolution Chain:</p>
-              <div className="flex flex-wrap">
+              <div className="flex flex-wrap gap-y-6">
                 {
-
+                  evolutionData && GrabEvolutionHelper(getAllEvolutionIds(evolutionData.chain))
                 }
-                <EvolutionComponent
-                  firstPic={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png`}
-                  secondPic={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png`}
-                />
               </div>
             </div>
 
