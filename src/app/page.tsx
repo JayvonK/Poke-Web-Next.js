@@ -56,7 +56,7 @@ export default function Home() {
 
   const handleSearch = () => {
     if (inputVal.trim() !== "") {
-      setSearchVal(inputVal);
+      setSearchVal(inputVal.toLowerCase());
     }
   }
 
@@ -100,6 +100,7 @@ export default function Home() {
 
       const evolutionData = await grabPokeEveloution(speciesData.evolution_chain.url);
       setEvolutionData(evolutionData);
+      console.log(evolutionData);
     } catch (error) {
       toast.error("Pokemon doesn't exist")
     }
@@ -125,7 +126,7 @@ export default function Home() {
       <div className="flex-grow">
         {
           pokemonData &&
-          <div className="grid grid-cols-[42%_42%_16%] font-chakra text-white text-2xl z-20 relative">
+          <div className="grid grid-cols-[43%_43%_14%] font-chakra text-white text-2xl z-20 relative">
             <div>
               <div className="flex w-full justify-center">
                 <button onClick={handleShinySwitch} className="h-[500px] w-[500px] hover:scale-110">
@@ -190,9 +191,14 @@ export default function Home() {
               </p>
             </div>
 
+            {/* Evolution Chain */}
+
             <div>
               <p className="font-chakra-bold drop-shadow-lg mb-8">Evolution Chain:</p>
               <div className="flex flex-wrap">
+                {
+
+                }
                 <EvolutionComponent
                   firstPic={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png`}
                   secondPic={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png`}
