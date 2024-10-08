@@ -1,6 +1,7 @@
 import { PokeAbilities, PokeMoves } from "@/interfaces/PokeData";
+import { PokeEncounters } from "@/interfaces/PokeEncounters";
 
-export const capatilizeFirstLetter = (word: string | PokeMoves[] | PokeAbilities[]) => {
+export const CapatilizeFirstLetter = (word: string | PokeMoves[] | PokeAbilities[]) => {
   if (typeof word === "string") {
     if (word.includes("-")) {
       return word
@@ -45,9 +46,17 @@ export const ConvertPokeWeight = (hectograms: number) => {
 export const GrabIdFromUrl = (url: string) => {
   let res = "";
   let idx = 2;
-  while(!isNaN(Number(url[url.length - idx]))){
+  while (!isNaN(Number(url[url.length - idx]))) {
     res += url[url.length - idx];
     idx += 1;
   }
   return res.split("").reverse().join("");
+}
+
+export const DisplayAllEncounters = (encounterData: PokeEncounters[]) => {
+  const encounterArray = encounterData.map(encounter =>
+    CapatilizeFirstLetter(encounter.location_area.name)
+  );
+
+  return encounterArray.length === 0 ? "N/A" : encounterArray.join(", ")
 }

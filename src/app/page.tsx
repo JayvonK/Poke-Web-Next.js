@@ -1,17 +1,18 @@
 'use client'
-import EvolutionComponent from "@/components/EvolutionComponent.tsx/EvolutionComponent";
 import Navbar from "@/components/Navbar/Navbar";
 import PokeType from "@/components/PokeType/PokeType";
+import { NameUrl } from "@/interfaces/Common";
 import { PokeData } from "@/interfaces/PokeData";
+import { PokeEncounters } from "@/interfaces/PokeEncounters";
 import { PokeEvolution } from "@/interfaces/PokeEvolution";
 import { PokeSpecies } from "@/interfaces/PokeSpecies";
 import { getAllEvolutionIds, GrabEvolutionHelper } from "@/utils/helpers/EvolutionChainFunction";
-import { capatilizeFirstLetter, ConvertPokeHeight, ConvertPokeWeight, GrabIdFromUrl } from "@/utils/helpers/HelperFunctions";
-import { grabPokeEveloution, grabPokemonData, grabPokemonSpecies } from "@/utils/services/data-services";
+import { CapatilizeFirstLetter, ConvertPokeHeight, ConvertPokeWeight, DisplayAllEncounters, GrabIdFromUrl } from "@/utils/helpers/HelperFunctions";
+import { grabAllPokemon, grabPokeEncounters, grabPokeEvolution, grabPokemonData, grabPokemonSpecies } from "@/utils/services/data-services";
 import { Button } from "@nextui-org/button";
 import { Modal, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal";
 import { Tooltip } from "@nextui-org/tooltip";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -36,6 +37,8 @@ export default function Home() {
   const [bgClass, setBgClass] = useState<string>("bg-poke-white");
   const [pokemonData, setPokemonData] = useState<PokeData>();
   const [evolutionData, setEvolutionData] = useState<PokeEvolution>();
+  const [encounterData, setEncounterData] = useState<PokeEncounters[]>();
+  const [allPokemons, setAllPokemons] = useState<NameUrl[]>();
   const [isShiny, setIsShiny] = useState<boolean>(false);
   const [isFav, setIsFav] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -55,9 +58,13 @@ export default function Home() {
     }
   }
 
-  const handleSearch = () => {
-    if (inputVal.trim() !== "") {
-      setSearchVal(inputVal.toLowerCase());
+  const handleSearch = (val: string = inputVal) => {
+    if (val.trim() !== "" && pokemonData && val !== pokemonData.id.toString()) {
+      if (!isNaN(Number(val)) && Number(val) > 1025) {
+        toast.error("There's only 1025 Pokemon");
+      } else {
+        setSearchVal(val);
+      }
     }
   }
 
@@ -68,7 +75,7 @@ export default function Home() {
 
   const handleShuffle = () => {
     const randomVal = (Math.floor(Math.random() * 1025) + 1).toString();
-    setSearchVal(randomVal);
+    handleSearch(randomVal);
   }
 
   const handleOpenFavorites = () => {
@@ -93,14 +100,25 @@ export default function Home() {
       const id = data.id.toString();
       setPokemonData(data);
 
-      const speciesData: PokeSpecies = await grabPokemonSpecies(data.id);
+      const speciesData: PokeSpecies = await grabPokemonSpecies(data.species.url);
       setBgClass(bgColors[speciesData.color.name])
 
       setIsFav(favArray.includes(id));
       localStorage.setItem("pastPokeSearch", id);
 
-      const evolutionData = await grabPokeEveloution(speciesData.evolution_chain.url);
+      const evolutionData = await grabPokeEvolution(speciesData.evolution_chain.url);
       setEvolutionData(evolutionData);
+
+      const encounterData = await grabPokeEncounters(id);
+      setEncounterData(encounterData);
+      
+      try {
+        const all = await grabAllPokemon();
+        setAllPokemons(all);
+      } catch (error) {
+        toast.error("Sorry, the search function isn't working right now")
+      }
+
     } catch (error) {
       toast.error("Pokemon doesn't exist")
     }
@@ -127,23 +145,23 @@ export default function Home() {
         {
           pokemonData &&
           <div className="grid grid-cols-[43%_43%_14%] font-chakra text-white text-2xl z-20 relative">
-            <div>
+            <div className="pr-10">
               <div className="flex w-full justify-center">
                 <button onClick={handleShinySwitch} className="h-[500px] w-[500px] hover:scale-110">
                   <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites?.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="aspect-square w-full h-full" />
                 </button>
 
-                <p className="sideways absolute -left-10 top-[20%] animate-pulse">Click the pokemon!</p>
+                <p className="sideways absolute -left-10 top-[15%] animate-pulse">Click the pokemon!</p>
               </div>
 
-              <p className="font-chakra-bold mb-4">Stats <span className="font-chakra">(hover for EV)</span>:</p>
+              <p className="font-chakra-bold mt-4 mb-6">Stats <span className="font-chakra">(hover for EV)</span>:</p>
 
-              <div className="grid grid-cols-3 gap-y-4">
+              <div className="flex flex-wrap gap-y-6 gap-x-16">
                 {
                   pokemonData.stats.map((stat, idx) =>
                     <Tooltip showArrow={true} content={stat.effort + ' Effort Points'} placement="top-start" key={idx}>
                       <p className="hover:cursor-default w-fit">
-                        {stat.stat.name === 'hp' ? stat.stat.name.toUpperCase() : capatilizeFirstLetter(stat.stat.name)}: {stat.base_stat}
+                        {stat.stat.name === 'hp' ? stat.stat.name.toUpperCase() : CapatilizeFirstLetter(stat.stat.name)}: {stat.base_stat}
                       </p>
                     </Tooltip>
                   )
@@ -151,14 +169,14 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-y-8 drop-shadow-lg h-full">
+            <div className="flex flex-col gap-y-6 drop-shadow-lg h-full pr-10">
               <p className="font-chakra-bold text-3xl">
                 #{pokemonData.id.toString().padStart(3, '0')}
               </p>
 
               <div className="flex gap-4 min-h-12">
                 <h2 className="font-chakra-bold text-5xl">
-                  {capatilizeFirstLetter(pokemonData.species.name)}
+                  {CapatilizeFirstLetter(pokemonData.species.name)}
                 </h2>
 
                 <button onClick={handleToggleFavorite}>
@@ -174,6 +192,7 @@ export default function Home() {
                 }
               </div>
 
+
               <p>
                 <span className="font-chakra-bold">Height:</span> {ConvertPokeHeight(pokemonData.height)}
               </p>
@@ -183,11 +202,15 @@ export default function Home() {
               </p>
 
               <p className="max-h-72 overflow-auto">
-                <span className="font-chakra-bold">Abilities:</span> {capatilizeFirstLetter(pokemonData.abilities)}
+                <span className="font-chakra-bold">Abilities:</span> {CapatilizeFirstLetter(pokemonData.abilities)}
+              </p>
+
+              <p>
+                <span className="font-chakra-bold">Locations:</span> {encounterData && DisplayAllEncounters(encounterData)}
               </p>
 
               <p className="max-h-72 overflow-auto">
-                <span className="font-chakra-bold">Moves:</span> {capatilizeFirstLetter(pokemonData.moves)}
+                <span className="font-chakra-bold">Moves:</span> {CapatilizeFirstLetter(pokemonData.moves)}
               </p>
             </div>
 
@@ -197,7 +220,7 @@ export default function Home() {
               <p className="font-chakra-bold drop-shadow-lg mb-8">Evolution Chain:</p>
               <div className="flex flex-wrap gap-y-6">
                 {
-                  evolutionData && GrabEvolutionHelper(getAllEvolutionIds(evolutionData.chain))
+                  evolutionData && GrabEvolutionHelper(getAllEvolutionIds(evolutionData.chain), handleSearch)
                 }
               </div>
             </div>
