@@ -10,8 +10,8 @@ export const grabPokemonData = async (pokeName: string | number) => {
   return data;
 }
 
-export const grabPokeEveloution = async (pokeId: number) => {
-  const promise = await fetch(url + 'evolution-chain/' + pokeId);
+export const grabPokeEveloution = async (evolUrl: string) => {
+  const promise = await fetch(evolUrl);
   const data: PokeEvolution = await promise.json();
   return data;
 }

@@ -1,9 +1,12 @@
 'use client'
+import EvolutionComponent from "@/components/EvolutionComponent.tsx/EvolutionComponent";
 import Navbar from "@/components/Navbar/Navbar";
 import PokeType from "@/components/PokeType/PokeType";
 import { PokeData } from "@/interfaces/PokeData";
-import { capatilizeFirstLetter, ConvertPokeHeight, ConvertPokeWeight } from "@/utils/helpers/HelperFunctions";
-import { grabPokemonData, grabPokemonSpecies } from "@/utils/services/data-services";
+import { PokeEvolution } from "@/interfaces/PokeEvolution";
+import { PokeSpecies } from "@/interfaces/PokeSpecies";
+import { capatilizeFirstLetter, ConvertPokeHeight, ConvertPokeWeight, GrabIdFromUrl } from "@/utils/helpers/HelperFunctions";
+import { grabPokeEveloution, grabPokemonData, grabPokemonSpecies } from "@/utils/services/data-services";
 import { Button } from "@nextui-org/button";
 import { Modal, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal";
 import { Tooltip } from "@nextui-org/tooltip";
@@ -31,6 +34,7 @@ export default function Home() {
   const [inputVal, setInputVal] = useState<string>("");
   const [bgClass, setBgClass] = useState<string>("bg-poke-white");
   const [pokemonData, setPokemonData] = useState<PokeData>();
+  const [evolutionData, setEvolutionData] = useState<PokeEvolution>();
   const [isShiny, setIsShiny] = useState<boolean>(false);
   const [isFav, setIsFav] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -88,11 +92,14 @@ export default function Home() {
       const id = data.id.toString();
       setPokemonData(data);
 
-      const speciesData = await grabPokemonSpecies(data.id);
+      const speciesData: PokeSpecies = await grabPokemonSpecies(data.id);
       setBgClass(bgColors[speciesData.color.name])
 
       setIsFav(favArray.includes(id));
-      localStorage.setItem("pastPokeSearch", id)
+      localStorage.setItem("pastPokeSearch", id);
+
+      const evolutionData = await grabPokeEveloution(speciesData.evolution_chain.url);
+      setEvolutionData(evolutionData);
     } catch (error) {
       toast.error("Pokemon doesn't exist")
     }
@@ -111,14 +118,14 @@ export default function Home() {
   return (
     <main className={`${bgClass} min-h-screen px-24 py-8 `}>
       {/* This is an absolute picture that is centered with the whole screen */}
-      <img src="/assets/images/poke ball.png" alt="" className="fixed z-10 left-1/2 top-1/2 transform translate-x-[-50%] translate-y-[-50%] opacity-5" />
+      <img src="/assets/images/poke ball.png" alt="" className="fixed z-10 left-1/2 top-1/2 transform translate-x-[-50%] translate-y-[-50%] opacity-10" />
 
       <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleOpenFavorites} onInputChange={handleOnChange} onClear={handleClear} onKeyDown={onKeyDown} />
 
       <div className="flex-grow">
         {
           pokemonData &&
-          <div className="grid grid-cols-2 font-chakra text-white text-2xl z-20 relative">
+          <div className="grid grid-cols-[42%_42%_16%] font-chakra text-white text-2xl z-20 relative">
             <div>
               <div className="flex w-full justify-center">
                 <button onClick={handleShinySwitch} className="h-[500px] w-[500px] hover:scale-110">
@@ -143,22 +150,22 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="drop-shadow-lg h-full">
-              <p className="font-chakra-bold text-3xl mb-4">
+            <div className="flex flex-col gap-y-8 drop-shadow-lg h-full">
+              <p className="font-chakra-bold text-3xl">
                 #{pokemonData.id.toString().padStart(3, '0')}
               </p>
 
-              <div className="flex gap-4 mb-6 min-h-12">
-                <h2 className="font-chakra-bold text-[42px]">
+              <div className="flex gap-4 min-h-12">
+                <h2 className="font-chakra-bold text-5xl">
                   {capatilizeFirstLetter(pokemonData.species.name)}
                 </h2>
 
                 <button onClick={handleToggleFavorite}>
-                  <img src={isFav ? "/assets/images/heart fill.png" : "/assets/images/heart outline.png"} alt="" className={`${isFav ? "h-12" : "h-11"} -mt-3`} />
+                  <img src={isFav ? "/assets/images/heart fill.png" : "/assets/images/heart outline.png"} alt="" className={`${isFav ? "h-12" : "h-11"}`} />
                 </button>
               </div>
 
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-x-2">
                 {
                   pokemonData.types.map((type, idx) => {
                     return <PokeType key={idx} type={type.type.name} />
@@ -166,24 +173,33 @@ export default function Home() {
                 }
               </div>
 
-              <div className="grid grid-flow-row gap-7">
-                <p>
-                  <span className="font-chakra-bold">Height:</span> {ConvertPokeHeight(pokemonData.height)}
-                </p>
+              <p>
+                <span className="font-chakra-bold">Height:</span> {ConvertPokeHeight(pokemonData.height)}
+              </p>
 
-                <p>
-                  <span className="font-chakra-bold">Weight:</span> {ConvertPokeWeight(pokemonData.weight)}lbs
-                </p>
+              <p>
+                <span className="font-chakra-bold">Weight:</span> {ConvertPokeWeight(pokemonData.weight)}lbs
+              </p>
 
-                <p className="max-h-72 overflow-auto">
-                  <span className="font-chakra-bold">Abilities:</span> {capatilizeFirstLetter(pokemonData.abilities)}
-                </p>
+              <p className="max-h-72 overflow-auto">
+                <span className="font-chakra-bold">Abilities:</span> {capatilizeFirstLetter(pokemonData.abilities)}
+              </p>
 
-                <p className="max-h-72 overflow-auto">
-                  <span className="font-chakra-bold">Moves:</span> {capatilizeFirstLetter(pokemonData.moves)}
-                </p>
+              <p className="max-h-72 overflow-auto">
+                <span className="font-chakra-bold">Moves:</span> {capatilizeFirstLetter(pokemonData.moves)}
+              </p>
+            </div>
+
+            <div>
+              <p className="font-chakra-bold drop-shadow-lg mb-8">Evolution Chain:</p>
+              <div className="flex flex-wrap">
+                <EvolutionComponent
+                  firstPic={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png`}
+                  secondPic={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png`}
+                />
               </div>
             </div>
+
           </div>
         }
       </div>

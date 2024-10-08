@@ -23,7 +23,7 @@ interface EvolutionDetails {
 
 interface PokeEvolve {
   evolution_details: EvolutionDetails[];
-  evolves_to: PokeEvolve[] | [];
+  evolves_to: PokeEvolve[];
   species: NameUrl;
 }
 

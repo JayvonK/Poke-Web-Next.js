@@ -41,3 +41,13 @@ export const ConvertPokeHeight = (decimeter: number) => {
 export const ConvertPokeWeight = (hectograms: number) => {
   return (hectograms * 0.220462).toFixed(2);
 }
+
+export const GrabIdFromUrl = (url: string) => {
+  let res = "";
+  let idx = 2;
+  while(!isNaN(Number(url[url.length - idx]))){
+    res += url[url.length - idx];
+    idx += 1;
+  }
+  return res.split("").reverse().join("");
+}

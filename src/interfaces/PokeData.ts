@@ -49,7 +49,3 @@ export interface PokeData {
   types: PokeType[];
   weight: number;
 }
-
-export interface PokeSpeciesData {
-  color: NameUrl;
-}
