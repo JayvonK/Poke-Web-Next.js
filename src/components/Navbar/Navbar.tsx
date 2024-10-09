@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import ButtonComponent from '../Button/ButtonComponent'
 import { ButtonType } from '@/enums/ButtonEnums'
 import { Autocomplete, Input } from '@nextui-org/react'
 import { NameUrl } from '@/interfaces/Common'
+import { CapatilizeFirstLetter, GrabIdFromUrl } from '@/utils/helpers/HelperFunctions'
 
 interface NavbarProps {
   inputVal: string,
@@ -13,9 +14,10 @@ interface NavbarProps {
   favoriteFunction: () => void,
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void,
   allPokemon: NameUrl[];
+  setSearchVal: Dispatch<SetStateAction<string>>,
 }
 
-const Navbar = ({ inputVal, searchFunction, shuffleFunction, favoriteFunction, onInputChange, onClear, onKeyDown, allPokemon }: NavbarProps) => {
+const Navbar = ({ inputVal, searchFunction, shuffleFunction, favoriteFunction, onInputChange, onClear, onKeyDown, allPokemon = [], setSearchVal }: NavbarProps) => {
 
   const [searchBoxOpen, setSearchBoxOpen] = useState<boolean>(false);
   let blurTime: ReturnType<typeof setTimeout>;
@@ -31,7 +33,6 @@ const Navbar = ({ inputVal, searchFunction, shuffleFunction, favoriteFunction, o
     }
   }
 
-
   return (
     <div className='grid grid-cols-[43%_57%] font-chakra mb-10'>
       <h1 className='font-chakra-bold text-8xl drop-shadow-lg text-white'>POKEWEB</h1>
@@ -39,7 +40,6 @@ const Navbar = ({ inputVal, searchFunction, shuffleFunction, favoriteFunction, o
       <div className='flex items-center gap-6'>
         <div className='relative'>
           <Input
-            isClearable
             type="text"
             value={inputVal}
             className='w-[405px] h-full relative'
@@ -54,11 +54,16 @@ const Navbar = ({ inputVal, searchFunction, shuffleFunction, favoriteFunction, o
 
           {
             searchBoxOpen &&
-            <div className='absolute bg-white px-4 py-2 w-full'>
-              <button className='hover:brightness-75 w-full flex' onClick={() => { alert("I have been clicked") }}>
-                <img src="" alt="" />
-                <p>This is in progress, sorry</p>
-              </button>
+            <div className='absolute bg-white px-4 py-2 w-full z-30'>
+              {
+                allPokemon && allPokemon.length > 0 ? allPokemon.slice(0, 5).map((pokemon, idx) =>
+                  <button key={idx} className='hover:brightness-75 w-full flex items-center gap-4' onClick={() => { setSearchVal(GrabIdFromUrl(pokemon.url)) }}>
+                    <img className='w-10' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${GrabIdFromUrl(pokemon.url)}.png`} alt="" />
+                    <p>{CapatilizeFirstLetter(pokemon.name)}</p>
+                  </button>
+                ) : <>No Pokemon Found</>
+              }
+
             </div>
           }
 

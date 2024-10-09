@@ -38,7 +38,8 @@ export default function Home() {
   const [pokemonData, setPokemonData] = useState<PokeData>();
   const [evolutionData, setEvolutionData] = useState<PokeEvolution>();
   const [encounterData, setEncounterData] = useState<PokeEncounters[]>();
-  const [allPokemons, setAllPokemons] = useState<NameUrl[]>();
+  const [allPokemons, setAllPokemons] = useState<NameUrl[]>([]);
+  const [allPokemonsFiltered, setAllPokemonsFiltered] = useState<NameUrl[]>([]);
   const [isShiny, setIsShiny] = useState<boolean>(false);
   const [isFav, setIsFav] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -48,8 +49,10 @@ export default function Home() {
 
   // Functions for search input
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const { value } = e.target;
     setInputVal(value);
+    const filteredArr = allPokemons.filter(poke => poke.name.toLowerCase().includes(value.toLowerCase()));
+    setAllPokemonsFiltered(filteredArr);
   }
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -63,7 +66,7 @@ export default function Home() {
       if (!isNaN(Number(val)) && Number(val) > 1025) {
         toast.error("There's only 1025 Pokemon");
       } else {
-        setSearchVal(val);
+        setSearchVal(val.toLowerCase());
       }
     }
   }
@@ -111,13 +114,6 @@ export default function Home() {
 
       const encounterData = await grabPokeEncounters(id);
       setEncounterData(encounterData);
-      
-      try {
-        const all = await grabAllPokemon();
-        setAllPokemons(all);
-      } catch (error) {
-        toast.error("Sorry, the search function isn't working right now")
-      }
 
     } catch (error) {
       toast.error("Pokemon doesn't exist")
@@ -126,9 +122,21 @@ export default function Home() {
     initialLoad.current = false;
   }, [])
 
+  const grabAllPokemons = async () => {
+    try {
+      const all = await grabAllPokemon();
+      setAllPokemons(all.results);
+      const filtered = all.results.filter(poke => poke.name.toLowerCase().includes(inputVal.toLowerCase()))
+      setAllPokemonsFiltered(filtered);
+    } catch (error) {
+      toast.error("Sorry, the search function isn't working right now")
+    }
+  }
+
   useEffect(() => {
     if (initialLoad.current) {
       grabPokemon(pastSearch);
+      grabAllPokemons();
     } else {
       grabPokemon(searchVal);
     }
@@ -139,14 +147,24 @@ export default function Home() {
       {/* This is an absolute picture that is centered with the whole screen */}
       <img src="/assets/images/poke ball.png" alt="" className="fixed z-10 left-1/2 top-1/2 transform translate-x-[-50%] translate-y-[-50%] opacity-10" />
 
-      <Navbar inputVal={inputVal} searchFunction={handleSearch} shuffleFunction={handleShuffle} favoriteFunction={handleOpenFavorites} onInputChange={handleOnChange} onClear={handleClear} onKeyDown={onKeyDown} allPokemon={allPokemons || []}/>
+      <Navbar
+        inputVal={inputVal}
+        searchFunction={handleSearch}
+        shuffleFunction={handleShuffle}
+        favoriteFunction={handleOpenFavorites}
+        onInputChange={handleOnChange}
+        onClear={handleClear}
+        onKeyDown={onKeyDown}
+        allPokemon={allPokemonsFiltered}
+        setSearchVal={setSearchVal}
+      />
 
       <div className="flex-grow">
         {
           pokemonData &&
           <div className="grid grid-cols-[43%_43%_14%] font-chakra text-white text-2xl z-20 relative">
             <div className="pr-10">
-              <div className="flex w-full justify-center">
+              <div className="flex w-full justify-center relative">
                 <button onClick={handleShinySwitch} className="h-[500px] w-[500px] hover:scale-110">
                   <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites?.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="aspect-square w-full h-full" />
                 </button>
@@ -160,7 +178,7 @@ export default function Home() {
                 {
                   pokemonData.stats.map((stat, idx) =>
                     <Tooltip showArrow={true} content={stat.effort + ' Effort Points'} placement="top-start" key={idx}>
-                      <p className="hover:cursor-default w-fit">
+                      <p className="hover:cursor-default w-fit hover:underline">
                         {stat.stat.name === 'hp' ? stat.stat.name.toUpperCase() : CapatilizeFirstLetter(stat.stat.name)}: {stat.base_stat}
                       </p>
                     </Tooltip>
@@ -173,6 +191,7 @@ export default function Home() {
               <p className="font-chakra-bold text-3xl">
                 #{pokemonData.id.toString().padStart(3, '0')}
               </p>
+              {isShiny && <img className="absolute -top-2 w-6 left-20" src="/assets/images/stars.png" alt="stars" />}
 
               <div className="flex gap-4 min-h-12">
                 <h2 className="font-chakra-bold text-5xl">
@@ -191,7 +210,6 @@ export default function Home() {
                   })
                 }
               </div>
-
 
               <p>
                 <span className="font-chakra-bold">Height:</span> {ConvertPokeHeight(pokemonData.height)}

@@ -49,3 +49,7 @@ export interface PokeData {
   types: PokeType[];
   weight: number;
 }
+
+export interface PokeSearchBoxArray {
+  results: NameUrl[];
+}

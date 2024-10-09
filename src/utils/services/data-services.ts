@@ -1,5 +1,5 @@
 import { NameUrl } from "@/interfaces/Common";
-import { PokeData } from "@/interfaces/PokeData";
+import { PokeData, PokeSearchBoxArray } from "@/interfaces/PokeData";
 import { PokeEncounters } from "@/interfaces/PokeEncounters";
 import { PokeEvolution } from "@/interfaces/PokeEvolution";
 import { PokeSpecies } from "@/interfaces/PokeSpecies";
@@ -8,6 +8,12 @@ const url = 'https://pokeapi.co/api/v2/';
 
 export const grabPokemonData = async (pokeName: string | number) => {
   const promise = await fetch(url + 'pokemon/' + pokeName);
+  const data: PokeData = await promise.json();
+  return data;
+}
+
+export const grabPokemonByUrl = async (pokeUrl: string) => {
+  const promise = await fetch(pokeUrl);
   const data: PokeData = await promise.json();
   return data;
 }
@@ -32,6 +38,6 @@ export const grabPokeEncounters = async (pokeName: string | number) => {
 
 export const grabAllPokemon = async () => {
   const promise = await fetch(url + 'pokemon?limit=1025&offset=0');
-  const data: NameUrl[] = await promise.json();
+  const data: PokeSearchBoxArray = await promise.json();
   return data;
 }
