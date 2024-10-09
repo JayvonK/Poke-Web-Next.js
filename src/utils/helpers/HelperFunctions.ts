@@ -8,6 +8,11 @@ export const CapatilizeFirstLetter = (word: string | PokeMoves[] | PokeAbilities
         .split('-')
         .map((p) => p[0].toUpperCase() + p.slice(1))
         .join(" ")
+    } else if (word.includes("_")){
+      return word
+        .split('_')
+        .map((p) => p[0].toUpperCase() + p.slice(1))
+        .join(" ")
     }
     return word[0].toUpperCase() + word.slice(1);
   }

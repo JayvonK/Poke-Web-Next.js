@@ -162,9 +162,9 @@ export default function Home() {
       <div className="flex-grow">
         {
           pokemonData &&
-          <div className="grid grid-cols-[43%_43%_14%] font-chakra text-white text-2xl z-20 relative">
-            <div className="pr-10">
-              <div className="flex w-full justify-center relative">
+          <div className="grid grid-cols-[43%_43%_14%] font-chakra h-[680px] text-white text-2xl z-20 relative">
+            <div className="flex flex-col justify-between pr-10 h-full">
+              <div className="flex w-full justify-center">
                 <button onClick={handleShinySwitch} className="h-[500px] w-[500px] hover:scale-110">
                   <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites?.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="aspect-square w-full h-full" />
                 </button>
@@ -172,25 +172,28 @@ export default function Home() {
                 <p className="sideways absolute -left-10 top-[15%] animate-pulse">Click the pokemon!</p>
               </div>
 
-              <p className="font-chakra-bold mt-4 mb-6">Stats <span className="font-chakra">(hover for EV)</span>:</p>
+              <div>
+                <p className="font-chakra-bold mt-4 mb-6">Stats <span className="font-chakra">(hover for EV)</span>:</p>
 
-              <div className="flex flex-wrap gap-y-6 gap-x-16">
-                {
-                  pokemonData.stats.map((stat, idx) =>
-                    <Tooltip showArrow={true} content={stat.effort + ' Effort Points'} placement="top-start" key={idx}>
-                      <p className="hover:cursor-default w-fit hover:underline">
-                        {stat.stat.name === 'hp' ? stat.stat.name.toUpperCase() : CapatilizeFirstLetter(stat.stat.name)}: {stat.base_stat}
-                      </p>
-                    </Tooltip>
-                  )
-                }
+                <div className="flex flex-wrap gap-y-6 gap-x-16">
+                  {
+                    pokemonData.stats.map((stat, idx) =>
+                      <Tooltip showArrow={true} content={stat.effort + ' Effort Points'} placement="top-start" key={idx}>
+                        <p className="hover:cursor-default w-fit hover:underline">
+                          {stat.stat.name === 'hp' ? stat.stat.name.toUpperCase() : CapatilizeFirstLetter(stat.stat.name)}: {stat.base_stat}
+                        </p>
+                      </Tooltip>
+                    )
+                  }
+                </div>
               </div>
             </div>
 
-            <div className="flex flex-col gap-y-6 drop-shadow-lg h-full pr-10">
+            <div className="flex flex-col gap-y-6 drop-shadow-lg h-[680px] pr-10">
               <p className="font-chakra-bold text-3xl">
                 #{pokemonData.id.toString().padStart(3, '0')}
               </p>
+
               {isShiny && <img className="absolute -top-2 w-6 left-20" src="/assets/images/stars.png" alt="stars" />}
 
               <div className="flex gap-4 min-h-12">
@@ -219,15 +222,15 @@ export default function Home() {
                 <span className="font-chakra-bold">Weight:</span> {ConvertPokeWeight(pokemonData.weight)}lbs
               </p>
 
-              <p className="max-h-72 overflow-auto">
+              <p className="min-h-8 max-h-11 overflow-auto">
                 <span className="font-chakra-bold">Abilities:</span> {CapatilizeFirstLetter(pokemonData.abilities)}
               </p>
 
-              <p>
+              <p className="min-h-8 max-h-20 overflow-auto">
                 <span className="font-chakra-bold">Locations:</span> {encounterData && DisplayAllEncounters(encounterData)}
               </p>
 
-              <p className="max-h-72 overflow-auto">
+              <p className="flex-grow overflow-auto">
                 <span className="font-chakra-bold">Moves:</span> {CapatilizeFirstLetter(pokemonData.moves)}
               </p>
             </div>
@@ -238,7 +241,7 @@ export default function Home() {
               <p className="font-chakra-bold drop-shadow-lg mb-8">Evolution Chain:</p>
               <div className="flex flex-wrap gap-y-6">
                 {
-                  evolutionData && GrabEvolutionHelper(getAllEvolutionIds(evolutionData.chain), handleSearch)
+                  evolutionData && GrabEvolutionHelper(getAllEvolutionIds(evolutionData.chain), handleSearch, isShiny)
                 }
               </div>
             </div>

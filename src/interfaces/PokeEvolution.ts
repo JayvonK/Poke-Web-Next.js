@@ -1,6 +1,6 @@
 import { NameUrl } from "./Common";
 
-interface EvolutionDetails {
+export interface EvolutionDetails {
   gender: number | null;
   held_item: NameUrl | null;
   item: NameUrl | null;
