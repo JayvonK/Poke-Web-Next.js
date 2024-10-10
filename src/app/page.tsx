@@ -143,7 +143,7 @@ export default function Home() {
   }, [searchVal])
 
   return (
-    <main className={`${bgClass} min-h-screen px-24 py-8 `}>
+    <main className={`${bgClass} min-h-screen 2xl:px-20 px-10 py-8`}>
       {/* This is an absolute picture that is centered with the whole screen */}
       <img src="/assets/images/poke ball.png" alt="" className="fixed z-10 left-1/2 top-1/2 transform translate-x-[-50%] translate-y-[-50%] opacity-10" />
 
@@ -162,10 +162,10 @@ export default function Home() {
       <div className="flex-grow">
         {
           pokemonData &&
-          <div className="grid grid-cols-[43%_43%_14%] font-chakra h-[680px] text-white text-2xl z-20 relative">
-            <div className="flex flex-col justify-between pr-10 h-full">
+          <div className="grid 2xl:grid-cols-[43%_43%_14%] xl:grid-cols-[43%_40%_17%] lg:grid-cols-2 font-chakra h-[680px] text-white text-2xl z-20 relative">
+            <div className="flex flex-col justify-between xl:pr-10 pr-14 h-full">
               <div className="flex w-full justify-center">
-                <button onClick={handleShinySwitch} className="h-[500px] w-[500px] hover:scale-110">
+                <button onClick={handleShinySwitch} className="xl:h-[500px] xl:w-[500px] h-[400px] w-[400px] hover:scale-110">
                   <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites?.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="aspect-square w-full h-full" />
                 </button>
 
@@ -175,7 +175,7 @@ export default function Home() {
               <div>
                 <p className="font-chakra-bold mt-4 mb-6">Stats <span className="font-chakra">(hover for EV)</span>:</p>
 
-                <div className="flex flex-wrap gap-y-6 gap-x-16">
+                <div className="flex flex-wrap gap-y-6 xl:gap-x-16 gap-x-11">
                   {
                     pokemonData.stats.map((stat, idx) =>
                       <Tooltip showArrow={true} content={stat.effort + ' Effort Points'} placement="top-start" key={idx}>
@@ -189,7 +189,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-y-6 drop-shadow-lg h-[680px] pr-10">
+            <div className="flex flex-col gap-y-6 drop-shadow-lg h-[680px] xl:pr-10">
               <p className="font-chakra-bold text-3xl">
                 #{pokemonData.id.toString().padStart(3, '0')}
               </p>
@@ -237,7 +237,7 @@ export default function Home() {
 
             {/* Evolution Chain */}
 
-            <div>
+            <div className="xl:block hidden">
               <p className="font-chakra-bold drop-shadow-lg mb-8">Evolution Chain:</p>
               <div className="flex flex-wrap gap-y-6">
                 {

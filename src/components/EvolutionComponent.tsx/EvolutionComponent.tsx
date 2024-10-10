@@ -10,7 +10,7 @@ const EvolutionComponent = (props: { firstIdx: string, secondIdx: string, evolRe
           <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork${props.isShiny ? "/shiny/" : "/"}${props.firstIdx}.png`} alt="" />
         </Button>
 
-        <img className="h-12" src="/assets/images/arrow.png" alt="" />
+        <img className="h-10" src="/assets/images/arrow.png" alt="" />
 
         <Button className="bg-black bg-opacity-50 rounded-full w-20 h-20 p-2 hover:scale-105" isIconOnly onClick={() => { props.evolClick(props.secondIdx) }}>
           <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork${props.isShiny ? "/shiny/" : "/"}${props.secondIdx}.png`} alt="" />
@@ -25,7 +25,7 @@ const EvolutionComponent = (props: { firstIdx: string, secondIdx: string, evolRe
         </DropdownTrigger>
         <DropdownMenu aria-label="Evolution Requirements">
           {
-            props.evolReq.split(",").map((req, idx) =>
+            props.evolReq.split(",").reverse().map((req, idx) =>
               <DropdownItem key={"Evololution Req No. " + idx}>{req}</DropdownItem>
             )
           }

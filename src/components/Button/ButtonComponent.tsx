@@ -6,11 +6,12 @@ import React from 'react'
 interface ButtonProps {
   type: string
   onClick: () => void
+  className?: string
 }
 
-const ButtonComponent = ({ type, onClick }: ButtonProps) => {
+const ButtonComponent = ({ type, onClick, className }: ButtonProps) => {
   return (
-    <Button className='bg-black bg-opacity-50 rounded-2xl w-16 h-16 p-1' onClick={onClick} isIconOnly>
+    <Button className={`bg-black bg-opacity-50 rounded-2xl w-16 h-16 p-1 ${className}`} onClick={onClick} isIconOnly>
       <div className='w-full h-full relative'>
         <Image
           src={
