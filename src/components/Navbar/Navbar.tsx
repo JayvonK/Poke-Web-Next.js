@@ -36,9 +36,10 @@ const Navbar = ({ inputVal, searchFunction, shuffleFunction, favoriteFunction, o
 
   return (
     <div className='grid xl:grid-cols-[43%_57%] lg:grid-cols-2 font-chakra mb-10'>
-      <div className='lg:block flex items-center justify-between xl:mb-0 mb-4'>
+      <div className='lg:block flex items-center justify-between xl:mb-0 sm:mb-4'>
         <h1 className='font-chakra-bold xl:text-8xl lg:text-[90px] sm:text-7xl text-[56px] drop-shadow-lg text-white'>POKEWEB</h1>
 
+      {/* Tablet Search Bar */}
         <div className='lg:hidden md:flex hidden relative gap-4'>
           <Input
             type="text"
@@ -76,7 +77,8 @@ const Navbar = ({ inputVal, searchFunction, shuffleFunction, favoriteFunction, o
         </div>
       </div>
 
-      <div className='w-full flex sm:flex-row md:justify-between flex-col sm:items-center lg:justify-start gap-6'>
+      {/* Desktop and Mobile Search Bar */}
+      <div className='w-full flex sm:flex-row md:justify-between flex-col sm:items-center lg:justify-start sm:gap-6 gap-4'>
         <div className='lg:block md:hidden flex justify-between sm:relative sm:gap-0 gap-4 w-full'>
           <div className='relative w-full'>
             <Input
