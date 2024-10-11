@@ -37,14 +37,14 @@ const Navbar = ({ inputVal, searchFunction, shuffleFunction, favoriteFunction, o
   return (
     <div className='grid xl:grid-cols-[43%_57%] lg:grid-cols-2 font-chakra mb-10'>
       <div className='lg:block flex items-center justify-between xl:mb-0 mb-4'>
-        <h1 className='font-chakra-bold xl:text-8xl lg:text-[90px] text-7xl drop-shadow-lg text-white'>POKEWEB</h1>
+        <h1 className='font-chakra-bold xl:text-8xl lg:text-[90px] sm:text-7xl text-[56px] drop-shadow-lg text-white'>POKEWEB</h1>
 
         <div className='lg:hidden md:flex hidden relative gap-4'>
           <Input
             type="text"
             value={inputVal}
             className='w-[240px] h-full relative'
-            classNames={{ inputWrapper: ["rounded-none", "text-5xl", "h-[64px]", searchBoxOpen ? "rounded-t-2xl" : "rounded-2xl"] }}
+            classNames={{ inputWrapper: ["rounded-none", "text-5xl", "sm:h-16", searchBoxOpen ? "rounded-t-2xl" : "rounded-2xl"] }}
             label="Search For Pokemon"
             onChange={onInputChange}
             onClear={onClear}
@@ -76,48 +76,48 @@ const Navbar = ({ inputVal, searchFunction, shuffleFunction, favoriteFunction, o
         </div>
       </div>
 
-      <div className='w-full flex items-center lg:justify-start xl:gap-6 gap-4'>
-        <div className='lg:block md:hidden block relative'>
-          <Input
-            type="text"
-            value={inputVal}
-            className='xl:w-[405px] lg:w-[225px] sm:w-[300px] w-[200px] h-full relative'
-            classNames={{ inputWrapper: ["rounded-none", "text-5xl", "h-[64px]", searchBoxOpen ? "rounded-t-2xl" : "rounded-2xl"] }}
-            label="Search For Pokemon"
-            onChange={onInputChange}
-            onClear={onClear}
-            onKeyDown={onKeyDown}
-            onFocus={handleOpenSearchBox}
-            onBlur={handleOpenSearchBox}
-          />
+      <div className='w-full flex sm:flex-row md:justify-between flex-col sm:items-center lg:justify-start gap-6'>
+        <div className='lg:block md:hidden flex justify-between sm:relative sm:gap-0 gap-4 w-full'>
+          <div className='relative w-full'>
+            <Input
+              type="text"
+              value={inputVal}
+              className='w-full h-full relative'
+              classNames={{ inputWrapper: ["rounded-none", "text-5xl", "sm:h-16", "h-14", searchBoxOpen ? "rounded-t-2xl" : "rounded-2xl"] }}
+              label="Search For Pokemon"
+              onChange={onInputChange}
+              onKeyDown={onKeyDown}
+              onFocus={handleOpenSearchBox}
+              onBlur={handleOpenSearchBox}
+            />
 
-          {
-            searchBoxOpen &&
-            <div className='absolute w-full z-30 rounded-b-2xl'>
-              {
-                allPokemon && allPokemon.length > 0 ? allPokemon.slice(0, 5).map((pokemon, idx) =>
-                  <button key={idx} className={`hover:brightness-75 w-full flex items-center gap-4 bg-white px-4 py-2 ${(idx === allPokemon.slice(0, 5).length - 1) && 'rounded-b-2xl'}`} onClick={() => { setSearchVal(GrabIdFromUrl(pokemon.url)) }}>
-                    <img className='w-10' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${GrabIdFromUrl(pokemon.url)}.png`} alt="" />
-                    <p>{CapatilizeFirstLetter(pokemon.name)}</p>
-                  </button>
-                ) :
-                  <div className={`hover:brightness-75 w-full flex items-center gap-4 bg-white px-4 py-2 rounded-b-2xl`}>
-                    <p>No Pokemon Found</p>
-                  </div>
-              }
+            {
+              searchBoxOpen &&
+              <div className='absolute w-full z-30 rounded-b-2xl'>
+                {
+                  allPokemon && allPokemon.length > 0 ? allPokemon.slice(0, 5).map((pokemon, idx) =>
+                    <button key={idx} className={`hover:brightness-75 w-full flex items-center gap-4 bg-white px-4 py-2 ${(idx === allPokemon.slice(0, 5).length - 1) && 'rounded-b-2xl'}`} onClick={() => { setSearchVal(GrabIdFromUrl(pokemon.url)) }}>
+                      <img className='w-10' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${GrabIdFromUrl(pokemon.url)}.png`} alt="" />
+                      <p>{CapatilizeFirstLetter(pokemon.name)}</p>
+                    </button>
+                  ) :
+                    <div className={`hover:brightness-75 w-full flex items-center gap-4 bg-white px-4 py-2 rounded-b-2xl`}>
+                      <p>No Pokemon Found</p>
+                    </div>
+                }
 
-            </div>
-          }
+              </div>
+            }
+          </div>
 
+          <ButtonComponent type={ButtonType.Search} onClick={searchFunction} className='sm:hidden block flex-shrink-0' />
         </div>
 
-        <div className='flex xl:gap-6 gap-4 lg:w-fit w-full lg:justify-start justify-end'>
-          <ButtonComponent type={ButtonType.Search} onClick={searchFunction} className='lg:block md:hidden block' />
+        <div className='flex xl:gap-6 gap-x-4 lg:w-fit md:w-full lg:justify-start sm:justify-end'>
+          <ButtonComponent type={ButtonType.Search} onClick={searchFunction} className='lg:block md:hidden sm:block hidden' />
           <ButtonComponent type={ButtonType.Shuffle} onClick={shuffleFunction} />
           <ButtonComponent type={ButtonType.Favorite} onClick={favoriteFunction} />
         </div>
-
-
       </div>
     </div>
   )

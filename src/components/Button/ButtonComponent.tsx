@@ -11,7 +11,7 @@ interface ButtonProps {
 
 const ButtonComponent = ({ type, onClick, className }: ButtonProps) => {
   return (
-    <Button className={`bg-black bg-opacity-50 rounded-2xl w-16 h-16 p-1 ${className}`} onClick={onClick} isIconOnly>
+    <Button className={`bg-black bg-opacity-50 rounded-2xl sm:w-16 sm:h-16 h-14 w-14 p-1 ${className}`} onClick={onClick} isIconOnly>
       <div className='w-full h-full relative'>
         <Image
           src={

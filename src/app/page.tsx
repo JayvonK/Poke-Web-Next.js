@@ -143,7 +143,7 @@ export default function Home() {
   }, [searchVal])
 
   return (
-    <main className={`${bgClass} min-h-screen 2xl:px-20 px-10 py-8`}>
+    <main className={`${bgClass} min-h-screen 2xl:px-20 md:px-10 px-6 py-8`}>
       {/* This is an absolute picture that is centered with the whole screen */}
       <img src="/assets/images/poke ball.png" alt="" className="fixed z-10 left-1/2 top-1/2 transform translate-x-[-50%] translate-y-[-50%] opacity-10" />
 
@@ -163,9 +163,9 @@ export default function Home() {
         {
           pokemonData &&
           <div className="grid 2xl:grid-cols-[43%_43%_14%] xl:grid-cols-[43%_40%_17%] lg:grid-cols-2 font-chakra h-[680px] text-white text-2xl z-20 relative">
-            <div className="flex flex-col justify-between xl:pr-10 pr-14 h-full">
+            <div className="flex flex-col justify-between xl:pr-10 lg:pr-14 h-full">
               <div className="flex w-full justify-center">
-                <button onClick={handleShinySwitch} className="xl:h-[500px] xl:w-[500px] h-[400px] w-[400px] hover:scale-110">
+                <button onClick={handleShinySwitch} className="xl:h-[500px] xl:w-[500px] sm:h-[400px] sm:w-[400px] w-[200px] h-[200px] hover:scale-110">
                   <img src={isShiny ? pokemonData.sprites.other["official-artwork"].front_shiny : pokemonData.sprites?.other["official-artwork"].front_default} alt={"Picture of Pokemon"} className="aspect-square w-full h-full" />
                 </button>
 
@@ -197,7 +197,7 @@ export default function Home() {
               {isShiny && <img className="absolute -top-2 w-6 left-20" src="/assets/images/stars.png" alt="stars" />}
 
               <div className="flex gap-4 min-h-12">
-                <h2 className="font-chakra-bold text-5xl">
+                <h2 className="font-chakra-bold sm:text-5xl text-4xl">
                   {CapatilizeFirstLetter(pokemonData.species.name)}
                 </h2>
 
