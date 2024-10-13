@@ -18,9 +18,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/assets/images/favicon.ico" />
+      </head>
       <body className={inter.className + ' min-h-screen'}>
         <Providers>
-          <ToastContainer/>
+          <ToastContainer />
           {children}
         </Providers>
       </body>
