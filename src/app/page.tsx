@@ -254,8 +254,6 @@ export default function Home() {
                 </div>
               </div>
 
-
-
               {/* Evolution Chain */}
 
               <div className="xl:col-span-1 col-span-2 xl:mt-0 mt-12 2xl:h-[680px] xl:h-[750px] h-fit xl:overflow-auto">
@@ -270,7 +268,6 @@ export default function Home() {
           }
         </div>
       </div>
-
 
       <Modal backdrop="blur" isOpen={isModalOpen} onOpenChange={handleOpenFavorites} size="2xl" classNames={{ body: "bg-black" }}>
         <ModalContent>
